@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddSingleton<IAuthorRepository, AuthorRepository>()
     .AddSingleton<IAuthorService, AuthorService>()
+    .AddSingleton<IBookRepository, BookRepository>()
+    .AddLogging(builder => builder.AddConsole())
     .AddGraphQLServer()
     .ModifyOptions(options =>
         {

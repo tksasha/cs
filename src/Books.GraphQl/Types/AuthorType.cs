@@ -19,5 +19,15 @@ public class AuthorType : ObjectType<Author>
             .Field("age")
             .Type<IntType>()
             .ResolveWith<AuthorResolver>(r => r.GetAge(default!));
+
+        descriptor
+            .Field("booksUnoptimal")
+            .Type<ListType<BookType>>()
+            .ResolveWith<AuthorResolver>(r => r.GetBooksUnoptimalAsync(default!, default));
+
+        descriptor
+            .Field("booksByGroupDataLoader")
+            .Type<ListType<BookType>>()
+            .ResolveWith<AuthorResolver>(r => r.GetBooksByGroupDataLoaderAsync(default!, default!, default));
     }
 }
