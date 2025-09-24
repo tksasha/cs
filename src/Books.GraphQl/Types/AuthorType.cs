@@ -1,4 +1,5 @@
 using Books.Data.Models;
+using Books.GraphQl.Resolvers;
 
 namespace Books.GraphQl.Types;
 
@@ -13,5 +14,10 @@ public class AuthorType : ObjectType<Author>
         descriptor
             .Field(f => f.Name)
             .Type<StringType>();
+
+        descriptor
+            .Field("age")
+            .Type<IntType>()
+            .ResolveWith<AuthorResolver>(r => r.GetAge(default!));
     }
 }
