@@ -1,6 +1,7 @@
 using Books.Data.Models;
 using Books.Data.Repositories;
 using HotChocolate.Resolvers;
+using Books.GraphQl.DataLoaders;
 
 namespace Books.GraphQl.Resolvers;
 
@@ -14,15 +15,10 @@ public class AuthorResolver(IBookRepository bookRepository)
         CancellationToken cancellationToken)
         => await bookRepository.GetAllByAuthorIdsAsync([author.Id], cancellationToken);
 
-    public async Task<IEnumerable<Book>> GetBooksByGroupDataLoaderAsync(
+    public async Task<IEnumerable<Book>> GetBooksByDataLoaderAsync(
         [Parent] Author author,
         IResolverContext resolverContext,
-    CancellationToken cancellationToken)
-        => await resolverContext.GroupDataLoader<string, Book>(
-            async (authorIds, cancellationToken) =>
-            {
-                IEnumerable<Book> books = await bookRepository.GetAllByAuthorIdsAsync(authorIds, cancellationToken);
-
-                return books.ToLookup(b => b.AuthorId);
-            }).LoadAsync(author.Id);
+        BooksByAuthorIdsDataLoader dataLoader,
+        CancellationToken cancellationToken)
+        => await dataLoader.LoadAsync(author.Id, cancellationToken) ?? [];
 }

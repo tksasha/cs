@@ -26,8 +26,8 @@ public class AuthorType : ObjectType<Author>
             .ResolveWith<AuthorResolver>(r => r.GetBooksUnoptimalAsync(default!, default));
 
         descriptor
-            .Field("booksByGroupDataLoader")
+            .Field("booksByDataLoader")
             .Type<ListType<BookType>>()
-            .ResolveWith<AuthorResolver>(r => r.GetBooksByGroupDataLoaderAsync(default!, default!, default));
+            .ResolveWith<AuthorResolver>(r => r.GetBooksByDataLoaderAsync(default!, default!, default!, default));
     }
 }
