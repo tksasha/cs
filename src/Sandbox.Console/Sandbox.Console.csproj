@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sandbox.Collections.Generic\Sandbox.Collections.Generic.csproj" />
+    <ProjectReference Include="..\Cs12DotNet8\Cs12DotNet8.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
