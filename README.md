@@ -1,0 +1,2 @@
+- Books is example GraphQl application
+- Sandbox is example Console application
