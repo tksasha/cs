@@ -27,4 +27,11 @@ public class BookRepository(ILogger<BookRepository> logger) : IBookRepository
 
         return _books.Where(b => authorIds.Contains(b.AuthorId));
     }
+
+    public async Task<IEnumerable<Book>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        await Task.Delay(0);
+
+        return _books;
+    }
 }

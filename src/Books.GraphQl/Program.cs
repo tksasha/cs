@@ -8,7 +8,9 @@ builder.Services
     .AddSingleton<IAuthorRepository, AuthorRepository>()
     .AddSingleton<IAuthorService, AuthorService>()
     .AddSingleton<IBookRepository, BookRepository>()
+    .AddSingleton<IBookService, BookService>()
     .AddLogging(builder => builder.AddConsole())
+    .AddMemoryCache()
     .AddGraphQLServer()
     .ModifyOptions(options =>
         {
