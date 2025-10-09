@@ -1,5 +1,5 @@
 .PHONY: default
-default: graphql
+default: console
 
 .PHONY: graphql
 graphql:
