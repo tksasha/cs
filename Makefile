@@ -1,10 +1,12 @@
-.PHONY: default
-default: console
+default: run
 
-.PHONY: graphql
-graphql:
+run: shop
+
+books:
 	@dotnet run --project src/Books.GraphQl
 
-.PHONY: console
 console:
 	@dotnet run --project src/Sandbox.Console
+
+shop:
+	@dotnet run --project src/Shop.GraphQl
