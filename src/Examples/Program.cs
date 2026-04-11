@@ -15,7 +15,8 @@ class Program
         // RunNullable(loggerFactory);
         // RunSwitchStatement(loggerFactory);
         // RunSwitchExpression(loggerFactory);
-        RunPatternMatching(loggerFactory);
+        // RunPatternMatching(loggerFactory);
+        ParamsKeyword.Run();
     }
 
     static void RunNullable(ILoggerFactory loggerFactory)
