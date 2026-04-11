@@ -12,9 +12,10 @@ class Program
             builder => builder.AddSimpleConsole(
                 options => options.IncludeScopes = true));
 
-        RunNullable(loggerFactory);
+        // RunNullable(loggerFactory);
         // RunSwitchStatement(loggerFactory);
         // RunSwitchExpression(loggerFactory);
+        RunPatternMatching(loggerFactory);
     }
 
     static void RunNullable(ILoggerFactory loggerFactory)
@@ -40,6 +41,15 @@ class Program
         var logger = loggerFactory.CreateLogger<SwitchStatement>();
 
         SwitchStatement subject = new(logger: logger);
+
+        subject.Run();
+    }
+
+    static void RunPatternMatching(ILoggerFactory loggerFactory)
+    {
+        var logger = loggerFactory.CreateLogger<PatternMatching>();
+
+        PatternMatching subject = new(logger: logger);
 
         subject.Run();
     }
