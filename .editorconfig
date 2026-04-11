@@ -1,0 +1,18 @@
+root = true
+
+[*.cs]
+
+# Remove unnecessary using
+# dotnet_diagnostic.IDE0005.severity = error
+dotnet_diagnostic.IDE0005.severity = warning
+# dotnet_diagnostic.IDE0005.severity = suggestion
+# dotnet_diagnostic.IDE0005.severity = silent
+
+# Unused private members (including methods)
+dotnet_diagnostic.IDE0051.severity = warning
+
+# Unused parameters in methods
+dotnet_diagnostic.IDE0060.severity = warning
+dotnet_diagnostic.CA1822.severity = warning
+
+dotnet_diagnostic.CA1873.severity = silent

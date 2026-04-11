@@ -8,4 +8,8 @@
  <!--Treat not Threat -->
 <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 <WarningsAsErrors>CS8600</WarningsAsErrors>
+
+<!-- Required for IDE0005 (Remove unnecessary usings) to work during build -->
+<GenerateDocumentationFile>true</GenerateDocumentationFile>
+<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 ```
