@@ -1,6 +1,4 @@
-default: run
-
-run: shop
+default: examples
 
 books:
 	@dotnet run --project src/Books.GraphQl
@@ -10,3 +8,6 @@ console:
 
 shop:
 	@dotnet run --project src/Shop.GraphQl
+
+examples:
+	dotnet run --project src/Examples
