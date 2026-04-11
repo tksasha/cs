@@ -12,10 +12,18 @@ class Program
             builder => builder.AddSimpleConsole(
                 options => options.IncludeScopes = true));
 
-        // Nullable.Run();
-
+        RunNullable(loggerFactory);
         // RunSwitchStatement(loggerFactory);
-        RunSwitchExpression(loggerFactory);
+        // RunSwitchExpression(loggerFactory);
+    }
+
+    static void RunNullable(ILoggerFactory loggerFactory)
+    {
+        var logger = loggerFactory.CreateLogger<Nullable>();
+
+        Nullable subject = new(logger: logger);
+
+        subject.Run();
     }
 
     static void RunSwitchStatement(ILoggerFactory loggerFactory)

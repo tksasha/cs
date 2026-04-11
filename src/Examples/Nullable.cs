@@ -1,14 +1,18 @@
-using static System.Console;
+using Microsoft.Extensions.Logging;
 
 namespace Examples;
 
-class Nullable
+class Nullable(ILogger<Nullable> logger)
 {
-    public static void Run()
+    public void Run()
     {
-        Number number = GetNumber(isNull: true); // !!! -- error is here
+        Number? number = GetNumber(isNull: true); // !!! -- w/o Number? error will be here
 
-        WriteLine($"[Nullable.Run] number = {number}");
+        using (logger.BeginScope("Run"))
+
+        {
+            logger.LogInformation("number = {Number}", number);
+        }
     }
 
     static Number? GetNumber(bool isNull) => isNull ? null : new Number { };
