@@ -8,7 +8,7 @@ class ParamsKeyword
     {
         foreach (int number in numbers)
         {
-            WriteLine($"[ParamsKeyword.AsArray] number = {number}");
+            WriteLine($"[{nameof(ParamsKeyword)}.{nameof(AsArray)}] number = {number}");
         }
     }
 
@@ -16,7 +16,7 @@ class ParamsKeyword
     {
         foreach (int number in numbers)
         {
-            WriteLine($"[ParamsKeyword.AsParams] number = {number}");
+            WriteLine($"[{nameof(ParamsKeyword)}.{nameof(AsParams)}] number = {number}");
         }
     }
 

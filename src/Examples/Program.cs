@@ -8,23 +8,21 @@ class Program
 {
     static void Main()
     {
-        Nullable.Run();
+        // Nullable.Run();
         // SwitchStatement.Run();
         // SwitchExpression.Run();
         // PatternMatching.Run();
         // ParamsKeyword.Run();
+        RunLogging();
+    }
 
+    static void RunLogging()
+    {
         using ILoggerFactory loggerFactory = LoggerFactory.Create(
             builder => builder
             // .SetMinimumLevel(LogLevel.Trace)
             .AddSimpleConsole(options => options.IncludeScopes = true));
 
-
-        // RunLogging(loggerFactory);
-    }
-
-    static void RunLogging(ILoggerFactory loggerFactory)
-    {
         var logger = loggerFactory.CreateLogger<Logging>();
 
         Logging logging = new(logger: logger);
