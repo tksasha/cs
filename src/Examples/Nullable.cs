@@ -8,7 +8,7 @@ class Nullable
     {
         Number? number = GetNumber(isNull: true); // !!! -- w/o Number? error will be here
 
-        WriteLine($"[Nullable.Run] number = {number}");
+        WriteLine($"[{nameof(Nullable)}.{nameof(Run)}] number = {number}");
     }
 
     static Number? GetNumber(bool isNull) => isNull ? null : new Number { };

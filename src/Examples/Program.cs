@@ -8,10 +8,10 @@ class Program
 {
     static void Main()
     {
-        // Nullable.Run();
+        Nullable.Run();
         // SwitchStatement.Run();
         // SwitchExpression.Run();
-        PatternMatching.Run();
+        // PatternMatching.Run();
         // ParamsKeyword.Run();
 
         using ILoggerFactory loggerFactory = LoggerFactory.Create(
