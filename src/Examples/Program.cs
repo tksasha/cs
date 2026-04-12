@@ -12,9 +12,11 @@ class Program
         // SwitchExpression.Run();
         // PatternMatching.Run();
         // ParamsKeyword.Run();
-        RunLogging();
+        // RunLogging();
+        LocalFunction.Run();
     }
 
+#pragma warning disable IDE0051
     static void RunLogging()
     {
         var config = new ConfigurationBuilder()
@@ -33,4 +35,5 @@ class Program
 
         logging.Run();
     }
+#pragma warning restore IDE0051
 }
