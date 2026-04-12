@@ -1,12 +1,12 @@
-using Microsoft.Extensions.Logging;
+using static System.Console;
 
 namespace Examples;
 
 #pragma warning disable IDE0066
 
-class SwitchStatement(ILogger<SwitchStatement> logger)
+class SwitchStatement
 {
-    public void Run()
+    public static void Run()
     {
         int number = 42;
 
@@ -25,10 +25,7 @@ class SwitchStatement(ILogger<SwitchStatement> logger)
                 break;
         }
 
-        using (logger.BeginScope("Run"))
-        {
-            logger.LogInformation("number = {Number}, word = {Word}", number, word);
-        }
+        WriteLine($"[{nameof(SwitchStatement)}.{nameof(Run)}] number = {number}, word = {word}");
     }
 }
 
