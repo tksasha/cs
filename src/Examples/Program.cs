@@ -10,7 +10,9 @@ class Program
     {
         // Nullable.Run();
         // SwitchStatement.Run();
-        SwitchExpression.Run();
+        // SwitchExpression.Run();
+        PatternMatching.Run();
+        // ParamsKeyword.Run();
 
         using ILoggerFactory loggerFactory = LoggerFactory.Create(
             builder => builder
@@ -19,9 +21,6 @@ class Program
 
 
         // RunLogging(loggerFactory);
-
-        // RunPatternMatching(loggerFactory);
-        // ParamsKeyword.Run();
     }
 
     static void RunLogging(ILoggerFactory loggerFactory)
@@ -31,15 +30,6 @@ class Program
         Logging logging = new(logger: logger);
 
         logging.Run();
-    }
-
-    static void RunPatternMatching(ILoggerFactory loggerFactory)
-    {
-        var logger = loggerFactory.CreateLogger<PatternMatching>();
-
-        PatternMatching subject = new(logger: logger);
-
-        subject.Run();
     }
 }
 

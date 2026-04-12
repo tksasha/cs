@@ -1,8 +1,8 @@
-using Microsoft.Extensions.Logging;
+using static System.Console;
 
 namespace Examples;
 
-class PatternMatching(ILogger<PatternMatching> logger)
+class PatternMatching
 {
     abstract class Vehicle { }
 
@@ -14,15 +14,12 @@ class PatternMatching(ILogger<PatternMatching> logger)
     class Truck : Vehicle
     { }
 
-    public void Run()
+    public static void Run()
     {
-        using (logger.BeginScope("Run"))
-        {
-            logger.LogInformation("Car w/o passengers toll = {Toll}", CalculateToll(new Car()));
-            logger.LogInformation("Car w/ one passenger toll = {Toll}", CalculateToll(new Car { Passengers = 1 }));
-            logger.LogInformation("Car w/ three passenger toll = {Toll}", CalculateToll(new Car { Passengers = 3 }));
-            logger.LogInformation("Truck toll = {Toll}", CalculateToll(new Truck()));
-        }
+        Log($"Car w/o passengers toll = {CalculateToll(new Car())}");
+        Log($"Car w/ one passenger toll = {CalculateToll(new Car { Passengers = 1 })}");
+        Log($"Car w/ three passenger toll = {CalculateToll(new Car { Passengers = 3 })}");
+        Log($"Truck toll = {CalculateToll(new Truck())}");
     }
 
     static decimal CalculateToll(Vehicle vehicle)
@@ -35,5 +32,10 @@ class PatternMatching(ILogger<PatternMatching> logger)
             Truck => 7.50m,
             _ => throw new ArgumentException("Unknown type of Vehicle: ", nameof(vehicle)),
         };
+    }
+
+    static void Log(string message)
+    {
+        WriteLine($"[{nameof(PatternMatching)}.{nameof(Run)}] {message}");
     }
 }
