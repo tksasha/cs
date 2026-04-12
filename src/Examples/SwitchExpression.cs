@@ -1,10 +1,10 @@
-using Microsoft.Extensions.Logging;
+using static System.Console;
 
 namespace Examples;
 
-class SwitchExpression(ILogger<SwitchExpression> logger)
+class SwitchExpression
 {
-    public void Run()
+    public static void Run()
     {
         int number = 42;
 
@@ -17,9 +17,6 @@ class SwitchExpression(ILogger<SwitchExpression> logger)
             _ => "Many",
         };
 
-        using (logger.BeginScope("Run"))
-        {
-            logger.LogInformation("number = {Number}, word = {Word}", number, word);
-        }
+        WriteLine($"[{nameof(SwitchExpression)}.{nameof(Run)}] number = {number}, word = {word}");
     }
 }

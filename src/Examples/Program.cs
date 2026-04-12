@@ -9,7 +9,8 @@ class Program
     static void Main()
     {
         // Nullable.Run();
-        SwitchStatement.Run();
+        // SwitchStatement.Run();
+        SwitchExpression.Run();
 
         using ILoggerFactory loggerFactory = LoggerFactory.Create(
             builder => builder
@@ -19,7 +20,6 @@ class Program
 
         // RunLogging(loggerFactory);
 
-        // RunSwitchExpression(loggerFactory);
         // RunPatternMatching(loggerFactory);
         // ParamsKeyword.Run();
     }
