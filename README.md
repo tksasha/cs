@@ -13,3 +13,8 @@
 <GenerateDocumentationFile>true</GenerateDocumentationFile>
 <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 ```
+
+# Clean local NuGet cache
+```sh
+$ dotnet nuget locals all --clear
+```
