@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace Examples;
-
-#pragma warning disable IDE0051
 
 class Program
 {
@@ -18,9 +17,14 @@ class Program
 
     static void RunLogging()
     {
+        var config = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build();
+
         using ILoggerFactory loggerFactory = LoggerFactory.Create(
             builder => builder
             // .SetMinimumLevel(LogLevel.Trace)
+            .AddConfiguration(config.GetSection("Logging"))
             .AddSimpleConsole(options => options.IncludeScopes = true));
 
         var logger = loggerFactory.CreateLogger<Logging>();
@@ -30,5 +34,3 @@ class Program
         logging.Run();
     }
 }
-
-#pragma warning restore IDE0051
