@@ -8,13 +8,15 @@ class Program
 {
     static void Main()
     {
+        Nullable.Run();
+
         using ILoggerFactory loggerFactory = LoggerFactory.Create(
             builder => builder
             // .SetMinimumLevel(LogLevel.Trace)
             .AddSimpleConsole(options => options.IncludeScopes = true));
 
 
-        RunLogging(loggerFactory);
+        // RunLogging(loggerFactory);
 
         // RunNullable(loggerFactory);
         // RunSwitchStatement(loggerFactory);
@@ -30,15 +32,6 @@ class Program
         Logging logging = new(logger: logger);
 
         logging.Run();
-    }
-
-    static void RunNullable(ILoggerFactory loggerFactory)
-    {
-        var logger = loggerFactory.CreateLogger<Nullable>();
-
-        Nullable subject = new(logger: logger);
-
-        subject.Run();
     }
 
     static void RunSwitchStatement(ILoggerFactory loggerFactory)
