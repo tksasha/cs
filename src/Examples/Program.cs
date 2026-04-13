@@ -13,7 +13,8 @@ class Program
         // PatternMatching.Run();
         // ParamsKeyword.Run();
         // RunLogging();
-        LocalFunction.Run();
+        // LocalFunction.Run();
+        Structs.Run();
     }
 
 #pragma warning disable IDE0051
