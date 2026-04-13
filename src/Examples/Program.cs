@@ -14,7 +14,8 @@ class Program
         // ParamsKeyword.Run();
         // RunLogging();
         // LocalFunction.Run();
-        Structs.Run();
+        // Structs.Run();
+        Records.Run();
     }
 
 #pragma warning disable IDE0051
