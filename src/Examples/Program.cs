@@ -18,7 +18,7 @@ class Program
         // Records.Run();
         // RecordsWith.Run();
         // Classes.BankAccount.Run();
-        Classes.Person.Run();
+        Classes.Test.Run();
     }
 
 #pragma warning disable IDE0051
