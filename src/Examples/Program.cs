@@ -15,7 +15,9 @@ class Program
         // RunLogging();
         // LocalFunction.Run();
         // Structs.Run();
-        Records.Run();
+        // Records.Run();
+        // RecordsWith.Run();
+        Classes.BankAccount.Run();
     }
 
 #pragma warning disable IDE0051

@@ -1,5 +1,3 @@
-using static System.Console;
-
 namespace Examples;
 
 readonly struct Temperature(decimal celsius) : IEquatable<Temperature>

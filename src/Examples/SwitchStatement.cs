@@ -1,5 +1,3 @@
-using static System.Console;
-
 namespace Examples;
 
 #pragma warning disable IDE0066

@@ -1,5 +1,3 @@
-using static System.Console;
-
 namespace Examples;
 
 class ParamsKeyword
