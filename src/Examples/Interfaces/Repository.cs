@@ -1,4 +1,4 @@
-namespace Examples;
+namespace Examples.Interfaces;
 
 interface IRepository<T>
 {

@@ -20,7 +20,7 @@ class Program
         // Classes.BankAccount.Run();
         // Classes.Test.Run();
         // Classes.Animal.Run();
-        ProductRepository.Run();
+        Interfaces.ProductRepository.Run();
     }
 
 #pragma warning disable IDE0051
