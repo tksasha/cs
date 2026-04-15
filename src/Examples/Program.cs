@@ -22,7 +22,8 @@ class Program
         // Classes.Animal.Run();
         // Interfaces.ProductRepository.Run();
         // Classes.Abstract.Run();
-        Compare.Test.Run();
+        // Compare.Test.Run();
+        Bitmasks.Run();
     }
 
 #pragma warning disable IDE0051
