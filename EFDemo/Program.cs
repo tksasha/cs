@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 using EFDemo;
-using Microsoft.EntityFrameworkCore;
 using EFDemo.Models;
 
 var configuration = new ConfigurationBuilder()
@@ -12,8 +13,13 @@ var configuration = new ConfigurationBuilder()
 
 var services = new ServiceCollection();
 
-services.AddDbContext<DatabaseContext>(options =>
-    options.UseNpgsql(configuration.GetConnectionString("Development")));
+using ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder
+    .AddConfiguration(configuration.GetSection("Logging"))
+    .AddSimpleConsole(options => options.IncludeScopes = true));
+
+services.AddDbContext<DatabaseContext>(options => options
+    .UseNpgsql(configuration.GetConnectionString("Development"))
+    .UseLoggerFactory(loggerFactory));
 
 var serviceProvider = services.BuildServiceProvider();
 
