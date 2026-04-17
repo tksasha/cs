@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using static System.Console;
 
 using EFDemo;
-using EFDemo.Models;
 using Microsoft.EntityFrameworkCore;
+using EFDemo.Models;
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
@@ -20,66 +19,19 @@ var serviceProvider = services.BuildServiceProvider();
 
 using var context = serviceProvider.GetRequiredService<DatabaseContext>();
 
-context.Database.EnsureCreated();
-
-// Create
 {
-    var blog = new Blog { Url = "http://blogs.msdn.com/adonet" };
-    var post = new Post { Title = "My first post", Content = "Lorem ipsum ...", Blog = blog };
+    var blog = new Blog { Url = "https://site.me/blogs/1" };
 
-    context.Add(blog);
-    context.Add(post);
-}
-await context.SaveChangesAsync();
+    context.Blogs.Add(blog);
 
-foreach (var blog in context.Blogs)
-{
-    WriteLine($"found: {blog.Id}, {blog.Url}");
+    context.SaveChanges();
 }
 
-// Read
-// WriteLine("Querying for a blog");
-// Blog? blog = await context.Blogs.OrderBy(b => b.Id).FirstOrDefaultAsync();
-// if (blog is null)
-// {
-//     WriteLine($"failed to get first Blog");
-
-//     return;
-// }
-
-// WriteLine($"found blog.Id = {blog.Id}");
-
-// BlogRepository blogRepository = new(context.Blogs);
-
-// if (blogRepository.TryGetById(blog.Id, out Blog other))
-// {
-//     WriteLine($"my repository is working, other.Id = {other.Id}");
-// }
-
-// // Update
-// WriteLine("Updating the Blog and adding a Post");
-// blog.Url = "https://devblogs.microsoft.com/dotnet";
-// blog.Posts.Add(new Post { Title = "Hello World", Content = "I wrote an app using EF Core!" });
-// await context.SaveChangesAsync();
-
-// Deleting
-foreach (var blog in context.Blogs)
+foreach (var blog in context.Blogs.AsNoTracking())
 {
-    WriteLine($"delete blog #{blog.Id}");
+    string message = $$"""
+    blog: {{blog.Id}}, "{{blog.Url}}"
+    """;
 
-    context.Remove(blog);
+    WriteLine(message);
 }
-
-foreach (var post in context.Posts)
-{
-    WriteLine($"delete post #{post.Id}");
-
-    context.Remove(post);
-}
-
-await context.SaveChangesAsync();
-
-
-WriteLine("horsing around");
-
-var a = new { Name = "John McClane" };
