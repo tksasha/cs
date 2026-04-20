@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EFDemo.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20260417065522_MigrateToPostgreSQL")]
-    partial class MigrateToPostgreSQL
+    [Migration("20260418075710_CreateDB")]
+    partial class CreateDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,85 +28,103 @@ namespace EFDemo.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Url")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("url");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_blogs");
 
-                    b.ToTable("Blogs");
+                    b.ToTable("blogs", (string)null);
                 });
 
             modelBuilder.Entity("EFDemo.Models.Grade", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_grades");
 
-                    b.ToTable("Grades");
+                    b.ToTable("grades", (string)null);
                 });
 
             modelBuilder.Entity("EFDemo.Models.Post", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BlogId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("blog_id");
 
                     b.Property<string>("Content")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("content");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("title");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_posts");
 
-                    b.HasIndex("BlogId");
+                    b.HasIndex("BlogId")
+                        .HasDatabaseName("ix_posts_blog_id");
 
-                    b.ToTable("Posts");
+                    b.ToTable("posts", (string)null);
                 });
 
             modelBuilder.Entity("EFDemo.Models.Student", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("first_name");
 
                     b.Property<int>("GradeId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("grade_id");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("last_name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_student");
 
-                    b.HasIndex("GradeId");
+                    b.HasIndex("GradeId")
+                        .HasDatabaseName("ix_student_grade_id");
 
-                    b.ToTable("Student");
+                    b.ToTable("student", (string)null);
                 });
 
             modelBuilder.Entity("EFDemo.Models.Post", b =>
@@ -115,7 +133,8 @@ namespace EFDemo.Migrations
                         .WithMany("Posts")
                         .HasForeignKey("BlogId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_posts_blogs_blog_id");
 
                     b.Navigation("Blog");
                 });
@@ -126,7 +145,8 @@ namespace EFDemo.Migrations
                         .WithMany("Students")
                         .HasForeignKey("GradeId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_student_grades_grade_id");
 
                     b.Navigation("Grade");
                 });

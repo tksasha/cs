@@ -15,6 +15,7 @@ public class DatabaseContextFactory : IDesignTimeDbContextFactory<DatabaseContex
 
         var options = new DbContextOptionsBuilder<DatabaseContext>()
             .UseNpgsql(configuration.GetConnectionString("Development"))
+            .UseSnakeCaseNamingConvention()
             .Options;
 
         return new DatabaseContext(options);
