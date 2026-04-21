@@ -1,13 +1,19 @@
 using Scalar.AspNetCore;
+using Microsoft.EntityFrameworkCore;
 
 using Be.User;
+using Be;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddOpenApi()
     .AddUserServices()
-    .AddHttpLogging();
+    .AddHttpLogging()
+    .AddDbContext<DatabaseContext>((serviceProvider, options) => options
+        .UseNpgsql(builder.Configuration.GetConnectionString("Development"))
+        .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>())
+        .UseSnakeCaseNamingConvention());
 
 builder.Logging.AddSimpleConsole(o => o.IncludeScopes = true);
 

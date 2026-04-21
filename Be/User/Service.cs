@@ -2,11 +2,11 @@ namespace Be.User;
 
 public interface IService
 {
-    IEnumerable<User> GetUsers(CancellationToken cancellationToken);
+    Task<IEnumerable<Model>> GetUsersAsync(CancellationToken cancellationToken);
 }
 
 public class Service(IRepository repository) : IService
 {
-    public IEnumerable<User> GetUsers(CancellationToken cancellationToken)
-        => repository.GetUsers(cancellationToken);
+    public Task<IEnumerable<Model>> GetUsersAsync(CancellationToken cancellationToken)
+        => repository.GetUsersAsync(cancellationToken);
 }

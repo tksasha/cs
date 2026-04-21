@@ -1,14 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace Be.User;
 
 public interface IRepository
 {
-    IEnumerable<User> GetUsers(CancellationToken cancellationToken);
+    Task<IEnumerable<Model>> GetUsersAsync(CancellationToken cancellationToken);
 }
 
-public class Repository : IRepository
+public class Repository(DatabaseContext databaseContext) : IRepository
 {
-    readonly List<User> _users = [new() { Name = "Bruce Wayne" }];
-
-    public IEnumerable<User> GetUsers(CancellationToken _)
-        => _users;
+    public async Task<IEnumerable<Model>> GetUsersAsync(CancellationToken cancellationToken)
+        => await databaseContext.Users.ToListAsync(cancellationToken);
 }
