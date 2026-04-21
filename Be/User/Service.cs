@@ -7,6 +7,8 @@ public interface IService
     Task<bool> CreateAsync(CreateRequest request, CancellationToken cancellationToken);
 
     Task<Model?> GetByIdAsync(int id, CancellationToken cancellationToken);
+
+    Task<bool> UpdateAsync(int id, UpdateRequest request, CancellationToken cancellationToken);
 }
 
 public class Service(IRepository repository) : IService
@@ -23,4 +25,18 @@ public class Service(IRepository repository) : IService
 
     public async Task<Model?> GetByIdAsync(int id, CancellationToken cancellationToken)
         => await repository.GetByIdAsync(id, cancellationToken);
+
+    public async Task<bool> UpdateAsync(int id, UpdateRequest request, CancellationToken cancellationToken)
+    {
+        Model? user = await repository.GetByIdAsync(id, cancellationToken);
+
+        if (user is null)
+        {
+            return false; // use Result or Expected to return an error
+        }
+
+        user.Name = request.Name;
+
+        return await repository.UpdateAsync(cancellationToken);
+    }
 }

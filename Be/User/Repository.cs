@@ -9,12 +9,14 @@ public interface IRepository
     Task<bool> CreateAsync(Model user, CancellationToken cancellationToken);
 
     Task<Model?> GetByIdAsync(int id, CancellationToken cancellationToken);
+
+    Task<bool> UpdateAsync(CancellationToken cancellationToken);
 }
 
 public class Repository(DatabaseContext databaseContext) : IRepository
 {
     public async Task<IEnumerable<Model>> GetAllAsync(CancellationToken cancellationToken)
-        => await databaseContext.Users.ToListAsync(cancellationToken);
+        => await databaseContext.Users.AsNoTracking().ToListAsync(cancellationToken);
 
     public async Task<bool> CreateAsync(Model user, CancellationToken cancellationToken)
     {
@@ -24,5 +26,8 @@ public class Repository(DatabaseContext databaseContext) : IRepository
     }
 
     public async Task<Model?> GetByIdAsync(int id, CancellationToken cancellationToken)
-        => databaseContext.Users.AsNoTracking().FirstOrDefault(u => u.Id == id);
+        => databaseContext.Users.FirstOrDefault(u => u.Id == id);
+
+    public async Task<bool> UpdateAsync(CancellationToken cancellationToken)
+        => await databaseContext.SaveChangesAsync(cancellationToken) > 0;
 }
