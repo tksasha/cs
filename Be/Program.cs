@@ -1,12 +1,12 @@
-using Be.User;
 using Scalar.AspNetCore;
+
+using Be.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 
-builder.Services.AddScoped<Be.User.IRepository, Be.User.Repository>();
-builder.Services.AddScoped<Be.User.IService, Be.User.Service>();
+builder.Services.AddUserServices();
 
 var app = builder.Build();
 
