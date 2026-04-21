@@ -4,11 +4,11 @@ namespace Be;
 
 public class DatabaseContext(DbContextOptions<DatabaseContext> dbContextOptions) : DbContext(dbContextOptions)
 {
-    public DbSet<User.Model> Users { get; set; }
+    public DbSet<Users.User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User.Model>()
+        modelBuilder.Entity<Users.User>()
             .ToTable("users");
     }
 }

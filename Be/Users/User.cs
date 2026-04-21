@@ -1,6 +1,6 @@
-namespace Be.User;
+namespace Be.Users;
 
-public class Model
+public class User
 {
     public int Id { get; set; }
     public required string Name { get; set; }

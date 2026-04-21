@@ -1,7 +1,7 @@
 using Scalar.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
-using Be.User;
+using Be.Users;
 using Be;
 
 var builder = WebApplication.CreateBuilder(args);

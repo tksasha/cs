@@ -1,4 +1,4 @@
-namespace Be.User;
+namespace Be.Users;
 
 public static class ServiceCollectionExtensions
 {
