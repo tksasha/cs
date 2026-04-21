@@ -55,9 +55,9 @@ static class Endpoints
         IService service,
         CancellationToken cancellationToken)
     {
-        return await service.CreateAsync(request, cancellationToken)
-            ? TypedResults.Created()
-            : TypedResults.InternalServerError(); // TODO: use Expected
+        await service.CreateAsync(request, cancellationToken);
+
+        return TypedResults.Created();
     }
 
     public static async Task<Results<Ok, InternalServerError>> UpdateAsync(
@@ -66,8 +66,8 @@ static class Endpoints
         IService service,
         CancellationToken cancellationToken)
     {
-        return await service.UpdateAsync(id, request, cancellationToken)
-            ? TypedResults.Ok()
-            : TypedResults.InternalServerError(); // TODO: use Expected
+        await service.UpdateAsync(id, request, cancellationToken);
+
+        return TypedResults.Ok();
     }
 }
