@@ -1,3 +1,4 @@
+using Be.User;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +21,6 @@ if (app.Environment.IsProduction())
     app.UseHttpsRedirection();
 }
 
-app.MapGet("/users", (Be.User.IService service, CancellationToken cancellationToken)
-    => service.GetUsers(cancellationToken)).WithName("GetPeople");
+app.MapUserEndpoints();
 
 app.Run();
