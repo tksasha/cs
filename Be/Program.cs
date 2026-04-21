@@ -8,6 +8,10 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddUserServices();
 
+builder.Services.AddHttpLogging();
+
+builder.Logging.AddSimpleConsole(o => o.IncludeScopes = true);
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -20,6 +24,8 @@ if (app.Environment.IsProduction())
 {
     app.UseHttpsRedirection();
 }
+
+app.UseHttpLogging();
 
 app.MapUserEndpoints();
 
