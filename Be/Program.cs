@@ -4,11 +4,10 @@ using Be.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
-
-builder.Services.AddUserServices();
-
-builder.Services.AddHttpLogging();
+builder.Services
+    .AddOpenApi()
+    .AddUserServices()
+    .AddHttpLogging();
 
 builder.Logging.AddSimpleConsole(o => o.IncludeScopes = true);
 
@@ -26,7 +25,6 @@ if (app.Environment.IsProduction())
 }
 
 app.UseHttpLogging();
-
 app.MapUserEndpoints();
 
 app.Run();
