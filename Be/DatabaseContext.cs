@@ -8,7 +8,6 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> dbContextOptions)
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Users.User>()
-            .ToTable("users");
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
     }
 }
