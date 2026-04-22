@@ -16,7 +16,6 @@ public class Service(IRepository<User> repository) : IService
             ValidTo = DateTime.MaxValue,
             RecordedFrom = DateTime.UtcNow,
             RecordedTo = DateTime.MaxValue,
-            Fact = 1,
         };
 
         await repository.CreateAsync(user, cancellationToken);
@@ -38,8 +37,6 @@ public class Service(IRepository<User> repository) : IService
         {
             user.Name = request.Name; // TODO: use validation
         }
-
-        user.Fact = request.Fact;
 
         await repository.UpdateAsync(cancellationToken);
     }
