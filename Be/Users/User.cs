@@ -4,7 +4,7 @@ namespace Be.Users;
 
 public class User : IEntity
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public required string Name { get; set; }
 
     public DateTimeOffset ValidFrom { get; set; }

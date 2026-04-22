@@ -10,6 +10,7 @@ public static class ServiceCollectionExtensions
         {
             services.AddScoped<IRepository<User>, Repository<User>>();
             services.AddScoped<IService, Service>();
+            services.AddScoped<CreateRequestValidator>();
 
             return services;
         }

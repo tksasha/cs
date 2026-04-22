@@ -24,9 +24,11 @@ namespace Be.Migrations
 
             modelBuilder.Entity("Be.Users.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<DateTimeOffset>("ValidFrom")
                         .HasColumnType("timestamp with time zone")

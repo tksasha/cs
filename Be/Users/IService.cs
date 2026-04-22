@@ -4,9 +4,9 @@ public interface IService
 {
     Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken);
 
-    Task CreateAsync(CreateRequest request, CancellationToken cancellationToken);
+    Task<bool> CreateAsync(CreateRequest request, CancellationToken cancellationToken);
 
-    Task<User?> GetByIdAsync(int id, CancellationToken cancellationToken);
+    Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-    Task UpdateAsync(int id, UpdateRequest request, CancellationToken cancellationToken);
+    Task UpdateAsync(Guid id, UpdateRequest request, CancellationToken cancellationToken);
 }

@@ -36,7 +36,7 @@ static class Endpoints
     }
 
     public static async Task<Results<Ok<User>, NotFound>> GetByIdAsync(
-        int id,
+        Guid id,
         IService service,
         CancellationToken cancellationToken)
     {
@@ -50,18 +50,20 @@ static class Endpoints
         return TypedResults.Ok(user);
     }
 
-    public static async Task<Results<Created, InternalServerError>> CreateAsync(
+    public static async Task<Results<Created, UnprocessableEntity>> CreateAsync(
         CreateRequest request,
         IService service,
         CancellationToken cancellationToken)
     {
-        await service.CreateAsync(request, cancellationToken);
+        var ok = await service.CreateAsync(request, cancellationToken);
+
+        if (!ok) return TypedResults.UnprocessableEntity();
 
         return TypedResults.Created();
     }
 
     public static async Task<Results<Ok, InternalServerError>> UpdateAsync(
-        int id,
+        Guid id,
         UpdateRequest request,
         IService service,
         CancellationToken cancellationToken)

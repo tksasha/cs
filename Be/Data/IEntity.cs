@@ -2,5 +2,8 @@ namespace Be.Data;
 
 public interface IEntity
 {
-    int Id { get; set; }
+    Guid Id { get; set; }
+    DateTimeOffset ValidTo { get; set; }
+    DateTimeOffset RecordedTo { get; set; }
+    DateTimeOffset RecordedFrom { get; set; }
 }

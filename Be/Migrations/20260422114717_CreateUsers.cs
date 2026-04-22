@@ -15,7 +15,7 @@ namespace Be.Migrations
                 name: "users",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     valid_from = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     recorded_from = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     name = table.Column<string>(type: "text", nullable: false),
@@ -29,6 +29,7 @@ namespace Be.Migrations
 
             migrationBuilder.Sql(@"
                 CREATE EXTENSION IF NOT EXISTS btree_gist;
+
                 ALTER TABLE users
                     ADD COLUMN valid_period tstzrange
                     GENERATED ALWAYS AS (tstzrange(valid_from, valid_to)) STORED;
@@ -44,7 +45,7 @@ namespace Be.Migrations
                         valid_period WITH &&,
                         recorded_period WITH &&
                     );
-            ");
+                ");
         }
 
         /// <inheritdoc />

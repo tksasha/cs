@@ -9,6 +9,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.HasKey(u => new { u.Id, u.ValidFrom, u.RecordedFrom });
 
+        builder.Property(u => u.Id).HasDefaultValueSql("gen_random_uuid()");
+
         builder.Property(u => u.ValidTo).HasDefaultValueSql("'infinity'::timestamptz");
 
         builder.Property(u => u.RecordedFrom).HasDefaultValueSql("now()");
