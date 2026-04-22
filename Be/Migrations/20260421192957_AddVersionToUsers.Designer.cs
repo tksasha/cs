@@ -3,6 +3,7 @@ using System;
 using Be;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Be.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20260421192957_AddVersionToUsers")]
+    partial class AddVersionToUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,10 +33,6 @@ namespace Be.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Fact")
-                        .HasColumnType("integer")
-                        .HasColumnName("fact");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -55,6 +54,10 @@ namespace Be.Migrations
                     b.Property<DateTime>("ValidTo")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("valid_to");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("integer")
+                        .HasColumnName("version");
 
                     b.HasKey("Id")
                         .HasName("pk_users");

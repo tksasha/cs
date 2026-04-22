@@ -7,7 +7,15 @@ public class Service(IRepository repository) : IService
 
     public async Task CreateAsync(CreateRequest request, CancellationToken cancellationToken)
     {
-        var user = new User { Name = request.Name };
+        var user = new User
+        {
+            Name = request.Name,
+            ValidFrom = DateTime.UtcNow,
+            ValidTo = DateTime.MaxValue,
+            RecordedFrom = DateTime.UtcNow,
+            RecordedTo = DateTime.MaxValue,
+            Fact = 1,
+        };
 
         await repository.CreateAsync(user, cancellationToken);
     }
@@ -21,10 +29,15 @@ public class Service(IRepository repository) : IService
 
         if (user is null)
         {
-            return; // use Result or Expected to return an error
+            return; // TODO: use Result or Expected to return an error
         }
 
-        user.Name = request.Name;
+        if (!string.IsNullOrWhiteSpace(request.Name))
+        {
+            user.Name = request.Name; // TODO: use validation
+        }
+
+        user.Fact = request.Fact;
 
         await repository.UpdateAsync(cancellationToken);
     }
