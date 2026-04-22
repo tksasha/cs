@@ -1,6 +1,8 @@
+using Be.Data;
+
 namespace Be.Users;
 
-public class User
+public class User : IEntity
 {
     public int Id { get; set; }
     public required string Name { get; set; }

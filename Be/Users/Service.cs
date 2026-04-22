@@ -1,6 +1,8 @@
+using Be.Data;
+
 namespace Be.Users;
 
-public class Service(IRepository repository) : IService
+public class Service(IRepository<User> repository) : IService
 {
     public Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken)
         => repository.GetAllAsync(cancellationToken);

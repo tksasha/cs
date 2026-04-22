@@ -1,3 +1,5 @@
+using Be.Data;
+
 namespace Be.Users;
 
 public static class ServiceCollectionExtensions
@@ -6,7 +8,7 @@ public static class ServiceCollectionExtensions
     {
         public IServiceCollection AddUserServices()
         {
-            services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IRepository<User>, Repository<User>>();
             services.AddScoped<IService, Service>();
 
             return services;
