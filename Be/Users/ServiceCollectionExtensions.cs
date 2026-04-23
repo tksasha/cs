@@ -1,3 +1,5 @@
+using FluentValidation;
+
 using Be.Data;
 
 namespace Be.Users;
@@ -10,7 +12,7 @@ public static class ServiceCollectionExtensions
         {
             services.AddScoped<IRepository<User>, Repository<User>>();
             services.AddScoped<IService, Service>();
-            services.AddScoped<CreateRequestValidator>();
+            services.AddScoped<IValidator<CreateRequest>, CreateRequestValidator>();
 
             return services;
         }

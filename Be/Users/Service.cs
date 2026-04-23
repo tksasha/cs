@@ -1,10 +1,12 @@
+using FluentValidation;
+
 using Be.Data;
 
 namespace Be.Users;
 
 public class Service(
     IRepository<User> repository,
-    CreateRequestValidator createRequestValidator,
+    IValidator<CreateRequest> createRequestValidator,
     ILogger<Service> logger) : IService
 {
     public Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken)
