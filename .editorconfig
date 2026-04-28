@@ -25,3 +25,6 @@ dotnet_diagnostic.IDE0060.severity = warning
 dotnet_diagnostic.CA1822.severity = warning
 
 dotnet_diagnostic.CA1873.severity = silent
+
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = true
