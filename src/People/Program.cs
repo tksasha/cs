@@ -3,6 +3,8 @@ using Scalar.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 using People;
+using People.Repositories;
+using People.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,9 @@ builder.Services.AddDbContext<DatabaseContext>((serviceProvider, options) => opt
     .UseNpgsql(builder.Configuration.GetConnectionString("Development"))
     .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>())
     .UseSnakeCaseNamingConvention());
+
+builder.Services.AddScoped<IRepository, Repository>();
+builder.Services.AddScoped<ILocationService, LocationService>();
 
 var app = builder.Build();
 

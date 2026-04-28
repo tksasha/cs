@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 
 using People.Entities;
+using People.Services;
 
 namespace People.Endpoints;
 
@@ -8,16 +9,14 @@ public class Locations : IEndpointGroup
 {
     public static void Map(RouteGroupBuilder builder)
     {
-        builder.MapGet("/", GetLocations);
+        builder.MapGet("/", GetLocationsAsync);
     }
 
-    public static Ok<List<Location>> GetLocations()
+    public static async Task<Ok<List<Location>>> GetLocationsAsync(
+        ILocationService service,
+        CancellationToken cancellationToken)
     {
-        List<Location> locations = [
-            new() { Id = 1, Name = "Paris" },
-            new() { Id = 2, Name = "London" },
-            new() { Id = 3, Name = "New York" },
-        ];
+        List<Location> locations = await service.GetAllAsync(cancellationToken);
 
         return TypedResults.Ok(locations);
     }
