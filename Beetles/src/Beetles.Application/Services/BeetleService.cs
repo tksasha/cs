@@ -1,4 +1,6 @@
 
+using System;
+
 using Microsoft.EntityFrameworkCore;
 
 using Beetles.Application.Common.Interfaces;
