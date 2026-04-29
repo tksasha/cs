@@ -9,5 +9,7 @@ public interface IBeetleService
 
     Task<BeetleResponse> GetByIdAsync(int id, CancellationToken cancellationToken);
 
-    Task<BeetleResponse> CreateAsync(CreateBeetleRequest request, CancellationToken cancellationToken);
+    Task<BeetleResponse> CreateAsync(BeetleRequest request, CancellationToken cancellationToken);
+
+    Task<BeetleResponse> UpdateAsync(int Id, BeetleRequest request, CancellationToken cancellationToken);
 }

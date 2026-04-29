@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Beetles.Application.Validators;
 
-internal sealed class BeetleValidator : AbstractValidator<CreateBeetleRequest>
+internal sealed class BeetleValidator : AbstractValidator<BeetleRequest>
 {
     public BeetleValidator()
     {

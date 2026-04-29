@@ -26,6 +26,9 @@ internal sealed class Repository(ApplicationDbContext context) : IRepository
         return entity;
     }
 
+    public void Update<T>(T entity) where T : class, IEntity
+        => context.Set<T>().Update(entity);
+
     public Task CommitChangesAsync(CancellationToken cancellationToken)
         => context.SaveChangesAsync(cancellationToken);
 }

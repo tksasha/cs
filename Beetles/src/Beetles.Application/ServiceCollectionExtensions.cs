@@ -18,7 +18,7 @@ public static class ServiceCollectionExtensions
         {
             services.AddScoped<IBeetleService, BeetleService>();
 
-            services.AddScoped<IValidator<CreateBeetleRequest>, BeetleValidator>();
+            services.AddScoped<IValidator<BeetleRequest>, BeetleValidator>();
 
             return services;
         }

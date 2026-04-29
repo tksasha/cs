@@ -10,5 +10,7 @@ public interface IRepository
 
     Task<T> InsertAsync<T>(T entity, CancellationToken cancellationToken) where T : class, IEntity;
 
+    void Update<T>(T entity) where T : class, IEntity;
+
     Task CommitChangesAsync(CancellationToken cancellationToken);
 }

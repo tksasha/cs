@@ -1,7 +1,6 @@
 using Beetles.Application.Common.Interfaces;
 using Beetles.Application.Requests;
 using Beetles.Application.Responses;
-using Beetles.Application.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -28,8 +27,8 @@ public static class IEnpointRouteBuilderExtensions
 
             beatles.MapPost("/", async Task<Results<Created<BeetleResponse>, ValidationProblem>> (
                 IBeetleService service,
-                CreateBeetleRequest request,
-                IValidator<CreateBeetleRequest> validator,
+                BeetleRequest request,
+                IValidator<BeetleRequest> validator,
                 CancellationToken cancellationToken) =>
             {
                 var validationResult = await validator.ValidateAsync(request, cancellationToken);
@@ -43,6 +42,25 @@ public static class IEnpointRouteBuilderExtensions
 
                 return TypedResults.Created($"/{nameof(beatles)}/{beetle.Id}", beetle);
             });
+
+            beatles.MapPatch("/{id}", async Task<Results<Ok<BeetleResponse>, ValidationProblem>> (
+                IBeetleService service,
+                int id,
+                BeetleRequest request,
+                IValidator<BeetleRequest> validator,
+                CancellationToken cancellationToken) =>
+                {
+                    var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+                    if (!validationResult.IsValid)
+                    {
+                        return TypedResults.ValidationProblem(validationResult.ToDictionary());
+                    }
+
+                    var beetle = await service.UpdateAsync(id, request, cancellationToken);
+
+                    return TypedResults.Ok(beetle);
+                });
 
             return builder;
         }

@@ -3,9 +3,9 @@ using Beetles.Domain.Entities;
 
 namespace Beetles.Application.Common.Mappings;
 
-internal static class CreateBeetleRequestExtensions
+internal static class BeetleRequestExtensions
 {
-    extension(CreateBeetleRequest request)
+    extension(BeetleRequest request)
     {
         public Beetle ToEntity()
             => new() { Name = request.Name };
