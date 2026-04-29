@@ -18,4 +18,14 @@ internal sealed class Repository(ApplicationDbContext context) : IRepository
 
         throw new Exception("Record not found"); // TODO: use a separate class
     }
+
+    public async Task<T> InsertAsync<T>(T entity, CancellationToken cancellationToken) where T : class, IEntity
+    {
+        await context.Set<T>().AddAsync(entity, cancellationToken);
+
+        return entity;
+    }
+
+    public Task CommitChangesAsync(CancellationToken cancellationToken)
+        => context.SaveChangesAsync(cancellationToken);
 }
