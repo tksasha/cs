@@ -1,7 +1,7 @@
 {
   "tasks": [
     {
-      "name": "dotnet-format",
+      "name": "dotnet-format-beetles",
       "command": "dotnet",
       "args": [
         "format",
