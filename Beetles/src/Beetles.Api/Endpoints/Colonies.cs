@@ -23,22 +23,31 @@ internal static class IEndpointRouteBuilderExtensions
                     return TypedResults.Ok(colonies);
                 });
 
-            colonies.MapPost("/", async Task<Results<Created<ColonyResponse>, ValidationProblem>> (
+            colonies.MapPost("/", async Task<Created<ColonyResponse>> (
                 ColonyRequest request,
                 IValidator<ColonyRequest> validator,
                 IColonyService service,
                 CancellationToken cancellationToken) =>
                 {
-                    var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-                    if (!validationResult.IsValid)
-                    {
-                        return TypedResults.ValidationProblem(validationResult.ToDictionary());
-                    }
+                    await validator.ValidateAndThrowAsync(request, cancellationToken);
 
                     var response = await service.CreateAsync(request, cancellationToken);
 
                     return TypedResults.Created($"/{nameof(colonies)}/{response.Id}", response);
+                });
+
+            colonies.MapPatch("/{id}", async Task<Ok<ColonyResponse>> (
+                int id,
+                ColonyRequest request,
+                IValidator<ColonyRequest> validator,
+                IColonyService service,
+                CancellationToken cancellationToken) =>
+                {
+                    await validator.ValidateAndThrowAsync(request, cancellationToken);
+
+                    var response = await service.UpdateAsync(id, request, cancellationToken);
+
+                    return TypedResults.Ok(response);
                 });
 
             return builder;

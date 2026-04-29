@@ -23,41 +23,31 @@ internal static class IEnpointRouteBuilderExtensions
                 return TypedResults.Ok(beetles);
             });
 
-            beatles.MapPost("/", async Task<Results<Created<BeetleResponse>, ValidationProblem>> (
+            beatles.MapPost("/", async Task<Created<BeetleResponse>> (
                 IBeetleService service,
                 BeetleRequest request,
                 IValidator<BeetleRequest> validator,
                 CancellationToken cancellationToken) =>
             {
-                var validationResult = await validator.ValidateAsync(request, cancellationToken);
+                await validator.ValidateAndThrowAsync(request, cancellationToken);
 
-                if (!validationResult.IsValid)
-                {
-                    return TypedResults.ValidationProblem(validationResult.ToDictionary());
-                }
+                var response = await service.CreateAsync(request, cancellationToken);
 
-                var beetle = await service.CreateAsync(request, cancellationToken);
-
-                return TypedResults.Created($"/{nameof(beatles)}/{beetle.Id}", beetle);
+                return TypedResults.Created($"/{nameof(beatles)}/{response.Id}", response);
             });
 
-            beatles.MapPatch("/{id}", async Task<Results<Ok<BeetleResponse>, ValidationProblem>> (
+            beatles.MapPatch("/{id}", async Task<Ok<BeetleResponse>> (
                 IBeetleService service,
                 int id,
                 BeetleRequest request,
                 IValidator<BeetleRequest> validator,
                 CancellationToken cancellationToken) =>
                 {
-                    var validationResult = await validator.ValidateAsync(request, cancellationToken);
+                    await validator.ValidateAndThrowAsync(request, cancellationToken);
 
-                    if (!validationResult.IsValid)
-                    {
-                        return TypedResults.ValidationProblem(validationResult.ToDictionary());
-                    }
+                    var response = await service.UpdateAsync(id, request, cancellationToken);
 
-                    var beetle = await service.UpdateAsync(id, request, cancellationToken);
-
-                    return TypedResults.Ok(beetle);
+                    return TypedResults.Ok(response);
                 });
 
             return builder;
