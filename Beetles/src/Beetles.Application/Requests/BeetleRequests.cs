@@ -1,3 +1,3 @@
-namespace Beetles.Domain.Requests;
+namespace Beetles.Application.Requests;
 
 public sealed record class CreateBeetleRequest(string Name);

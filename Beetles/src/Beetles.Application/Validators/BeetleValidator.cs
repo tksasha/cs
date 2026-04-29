@@ -1,4 +1,4 @@
-using Beetles.Domain.Requests;
+using Beetles.Application.Requests;
 
 using FluentValidation;
 

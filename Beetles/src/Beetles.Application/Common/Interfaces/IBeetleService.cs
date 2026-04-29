@@ -1,10 +1,10 @@
-using Beetles.Domain.Entities;
+using Beetles.Application.Responses;
 
 namespace Beetles.Application.Common.Interfaces;
 
 public interface IBeetleService
 {
-    Task<List<Beetle>> GetAllAsync(CancellationToken cancellationToken);
+    Task<List<BeetleResponse>> GetAllAsync(CancellationToken cancellationToken);
 
-    Task<Beetle> GetByIdAsync(int id, CancellationToken cancellationToken);
+    Task<BeetleResponse> GetByIdAsync(int id, CancellationToken cancellationToken);
 }
