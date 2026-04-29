@@ -2,6 +2,9 @@ root = true
 
 [*.cs]
 
+[Beetles/Beetles.Infrastructure/**.cs]
+generated_code = true
+
 # Indentation and spacing
 indent_size = 4
 indent_style = space

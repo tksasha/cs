@@ -1,10 +1,7 @@
-
-using System;
-
-using Microsoft.EntityFrameworkCore;
-
 using Beetles.Application.Common.Interfaces;
 using Beetles.Domain.Entities;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Beetles.Application.Services;
 

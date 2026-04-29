@@ -1,6 +1,6 @@
-using FluentValidation;
-
 using Beetles.Domain.Requests;
+
+using FluentValidation;
 
 namespace Beetles.Application.Validators;
 

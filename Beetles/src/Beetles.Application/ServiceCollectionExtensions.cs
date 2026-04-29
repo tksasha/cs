@@ -1,8 +1,8 @@
 
-using Microsoft.Extensions.DependencyInjection;
-
 using Beetles.Application.Common.Interfaces;
 using Beetles.Application.Services;
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Beetles.Application;
 

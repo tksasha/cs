@@ -1,8 +1,8 @@
-using Scalar.AspNetCore;
-
-using Beetles.Infrastructure;
-using Beetles.Application;
 using Beetles.Api.Endpoints;
+using Beetles.Application;
+using Beetles.Infrastructure;
+
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
