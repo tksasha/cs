@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Beetles.Api.Endpoints;
 
-public static class IEnpointRouteBuilderExtensions
+internal static class IEnpointRouteBuilderExtensions
 {
     extension(IEndpointRouteBuilder builder)
     {

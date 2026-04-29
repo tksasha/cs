@@ -3,7 +3,7 @@ using Beetles.Domain.Entities;
 
 namespace Beetles.Application.Common.Mappings;
 
-public static class ColonyExtensions
+internal static class ColonyExtensions
 {
     extension(Colony colony)
     {
