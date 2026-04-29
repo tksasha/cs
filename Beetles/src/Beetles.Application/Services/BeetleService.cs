@@ -1,7 +1,8 @@
-using Beetles.Application.Common.Interfaces;
-using Beetles.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
+
+using Beetles.Application.Common.Interfaces;
+using Beetles.Domain.Entities;
 
 namespace Beetles.Application.Services;
 
