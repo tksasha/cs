@@ -12,9 +12,7 @@ public static class IEnpointRouteBuilderExtensions
     {
         public IEndpointRouteBuilder MapBeetlesEndpoints()
         {
-            var beatles = builder
-                .MapGroup("/beetles")
-                .WithTags("Beetles");
+            var beatles = builder.MapGroup("/beetles").WithTags("Beetles");
 
             beatles.MapGet("/", async Task<Ok<List<BeetleResponse>>> (
                 IBeetleService service,

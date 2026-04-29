@@ -1,4 +1,3 @@
-
 using Beetles.Application.Common.Interfaces;
 using Beetles.Application.Requests;
 using Beetles.Application.Responses;
@@ -17,8 +16,10 @@ public static class ServiceCollectionExtensions
         public IServiceCollection AddApplication()
         {
             services.AddScoped<IBeetleService, BeetleService>();
+            services.AddScoped<IColonyService, ColonyService>();
 
             services.AddScoped<IValidator<BeetleRequest>, BeetleValidator>();
+            services.AddScoped<IValidator<ColonyRequest>, ColonyValidator>();
 
             return services;
         }

@@ -20,5 +20,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapBeetlesEndpoints();
+app.MapColonyEndpoints();
 
 app.Run();

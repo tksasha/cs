@@ -7,6 +7,7 @@ namespace Beetles.Infrastructure;
 public sealed class ApplicationDbContext(DbContextOptions options) : DbContext(options)
 {
     public DbSet<Beetle> Beetles { get; set; }
+    public DbSet<Colony> Colonies { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
