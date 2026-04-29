@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Beetles.Api/Beetles.Api.csproj" />
+    <Project Path="src/Beetles.Application/Beetles.Application.csproj" />
+    <Project Path="src/Beetles.Domain/Beetles.Domain.csproj" />
+    <Project Path="src/Beetles.Infrastructure/Beetles.Infrastructure.csproj" />
+  </Folder>
+</Solution>
