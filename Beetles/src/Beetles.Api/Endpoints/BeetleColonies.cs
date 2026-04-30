@@ -23,6 +23,15 @@ internal static partial class IEndpointRouteBuilderExtensions
                     return TypedResults.NoContent();
                 });
 
+            beetleColonies.MapGet("/", async Task<Ok<List<BeetleColonyResponse>>> (
+                IBeetleColonyService service,
+                CancellationToken cancellationToken) =>
+                {
+                    var beetleColonies = await service.GetAllAsync(cancellationToken);
+
+                    return TypedResults.Ok(beetleColonies);
+                });
+
             return builder;
         }
     }

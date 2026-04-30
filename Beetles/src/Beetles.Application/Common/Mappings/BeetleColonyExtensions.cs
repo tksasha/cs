@@ -12,7 +12,7 @@ internal static class BeetleColonyExtensions
                 Beetle: beetleColony.Beetle!,
                 Colony: beetleColony.Colony!,
                 ValidFrom: beetleColony.ValidFrom,
-                ValidTo: beetleColony.ValidFrom,
+                ValidTo: beetleColony.ValidTo ?? DateTimeOffset.MaxValue,
                 RecordedFrom: beetleColony.RecordedFrom,
                 RecordedTo: beetleColony.RecordedTo);
     }
