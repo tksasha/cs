@@ -19,7 +19,8 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-app.MapBeetlesEndpoints();
+app.MapBeetleEndpoints();
 app.MapColonyEndpoints();
+app.MapBeetleColonyEndpoints();
 
 app.Run();

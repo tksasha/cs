@@ -2,7 +2,7 @@ root = true
 
 [*.cs]
 
-[Beetles/Beetles.Infrastructure/**.cs]
+[Beetles/Beetles.Infrastructure/Migrations/**.cs]
 generated_code = true
 
 # Indentation and spacing

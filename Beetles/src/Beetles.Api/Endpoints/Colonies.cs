@@ -6,7 +6,7 @@ using FluentValidation;
 
 namespace Beetles.Api.Endpoints;
 
-internal static class IEndpointRouteBuilderExtensions
+internal static partial class IEndpointRouteBuilderExtensions
 {
     extension(IEndpointRouteBuilder builder)
     {

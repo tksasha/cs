@@ -20,6 +20,7 @@ public static class ServiceCollectionExtensions
                 .UseSnakeCaseNamingConvention());
 
             services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IBitemporalRepository, BitemporalRepository>();
 
             return services;
         }

@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Beetles.Api.Endpoints;
 
-internal static class IEnpointRouteBuilderExtensions
+internal static partial class IEndpointRouteBuilderExtensions
 {
     extension(IEndpointRouteBuilder builder)
     {
-        public IEndpointRouteBuilder MapBeetlesEndpoints()
+        public IEndpointRouteBuilder MapBeetleEndpoints()
         {
             var beatles = builder.MapGroup("/beetles").WithTags("Beetles");
 
