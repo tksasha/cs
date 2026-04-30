@@ -4,19 +4,19 @@ using Microsoft.Extensions.Configuration;
 
 namespace Beetles.Infrastructure;
 
-public class DatabaseContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+public class DatabaseContextFactory : IDesignTimeDbContextFactory<DatabaseContext>
 {
-    public ApplicationDbContext CreateDbContext(string[] args)
+    public DatabaseContext CreateDbContext(string[] args)
     {
         var configuration = new ConfigurationBuilder()
             .AddUserSecrets<DatabaseContextFactory>()
             .Build();
 
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+        var options = new DbContextOptionsBuilder<DatabaseContext>()
             .UseNpgsql(configuration.GetConnectionString("Development"))
             .UseSnakeCaseNamingConvention()
             .Options;
 
-        return new ApplicationDbContext(options);
+        return new DatabaseContext(options);
     }
 }

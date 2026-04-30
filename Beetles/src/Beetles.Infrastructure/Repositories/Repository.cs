@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Beetles.Infrastructure.Repositories;
 
-internal sealed class Repository(ApplicationDbContext context) : IRepository
+internal sealed class Repository(DatabaseContext context) : IRepository
 {
     public IQueryable<T> QueryAll<T>() where T : class, IEntity
         => context.Set<T>().AsNoTracking();

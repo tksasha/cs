@@ -14,7 +14,7 @@ public static class ServiceCollectionExtensions
     {
         public IServiceCollection AddInfrastructure(IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationDbContext>((serviceProvider, options) => options
+            services.AddDbContext<DatabaseContext>((serviceProvider, options) => options
                 .UseNpgsql(configuration.GetConnectionString("Development"))
                 .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>())
                 .UseSnakeCaseNamingConvention());
