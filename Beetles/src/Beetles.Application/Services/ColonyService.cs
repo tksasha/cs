@@ -18,7 +18,7 @@ internal sealed class ColonyService(IRepository repository) : IColonyService
 
     public async Task<ColonyResponse> CreateAsync(ColonyRequest request, CancellationToken cancellationToken)
     {
-        bool any = await repository.QueryAll<Beetle>().AnyAsync(b => b.Name == request.Name, cancellationToken);
+        bool any = await repository.QueryAll<Colony>().AnyAsync(b => b.Name == request.Name, cancellationToken);
 
         if (any) throw new ConflictException();
 
