@@ -1,4 +1,5 @@
 using Beetles.Api.Endpoints;
+using Beetles.Api.Infrastructure;
 using Beetles.Application;
 using Beetles.Infrastructure;
 
@@ -11,6 +12,9 @@ builder.Services.AddOpenApi();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<ApplicationExceptionHandler>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -18,6 +22,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
+
+app.UseExceptionHandler();
 
 app.MapBeetleEndpoints();
 app.MapColonyEndpoints();

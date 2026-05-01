@@ -13,6 +13,15 @@ internal static partial class IEndpointRouteBuilderExtensions
         {
             var beetleColonies = builder.MapGroup("/beetle-colonies").WithTags("BeetleColonies");
 
+            beetleColonies.MapGet("/", async Task<Ok<List<BeetleColonyResponse>>> (
+                IBeetleColonyService service,
+                CancellationToken cancellationToken) =>
+                {
+                    var beetleColonies = await service.GetAllAsync(cancellationToken);
+
+                    return TypedResults.Ok(beetleColonies);
+                });
+
             beetleColonies.MapPost("/", async Task<NoContent> (
                 BeetleColonyRequest request,
                 IBeetleColonyService service,
@@ -21,15 +30,6 @@ internal static partial class IEndpointRouteBuilderExtensions
                     await service.CreateAsync(request, cancellationToken);
 
                     return TypedResults.NoContent();
-                });
-
-            beetleColonies.MapGet("/", async Task<Ok<List<BeetleColonyResponse>>> (
-                IBeetleColonyService service,
-                CancellationToken cancellationToken) =>
-                {
-                    var beetleColonies = await service.GetAllAsync(cancellationToken);
-
-                    return TypedResults.Ok(beetleColonies);
                 });
 
             return builder;
