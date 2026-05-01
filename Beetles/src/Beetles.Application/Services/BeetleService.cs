@@ -4,6 +4,7 @@ using Beetles.Application.Responses;
 using Microsoft.EntityFrameworkCore;
 using Beetles.Application.Common.Mappings;
 using Beetles.Application.Requests;
+using Beetles.Application.Exceptions;
 
 namespace Beetles.Application.Services;
 
@@ -26,7 +27,7 @@ internal class BeetleService(IRepository repository) : IBeetleService
     {
         bool any = await repository.QueryAll<Beetle>().AnyAsync(e => e.Name == request.Name, cancellationToken);
 
-        if (any) throw new Exception("Name is already taken"); // TODO: use a separate class
+        if (any) throw new AlreadyExistsException();
 
         var beetle = await repository.InsertAsync(request.ToEntity(), cancellationToken);
 
@@ -44,7 +45,7 @@ internal class BeetleService(IRepository repository) : IBeetleService
             .QueryAll<Beetle>()
             .AnyAsync(e => e.Id != id && e.Name == request.Name, cancellationToken);
 
-        if (any) throw new Exception("Name is already taken"); // TODO: use a separate class
+        if (any) throw new AlreadyExistsException();
 
         var beetle = await repository.GetByIdAsync<Beetle>(id, cancellationToken);
 

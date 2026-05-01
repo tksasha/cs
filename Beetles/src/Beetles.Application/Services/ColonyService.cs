@@ -1,5 +1,6 @@
 using Beetles.Application.Common.Interfaces;
 using Beetles.Application.Common.Mappings;
+using Beetles.Application.Exceptions;
 using Beetles.Application.Requests;
 using Beetles.Application.Responses;
 using Beetles.Domain.Entities;
@@ -17,6 +18,10 @@ internal sealed class ColonyService(IRepository repository) : IColonyService
 
     public async Task<ColonyResponse> CreateAsync(ColonyRequest request, CancellationToken cancellationToken)
     {
+        bool any = await repository.QueryAll<Beetle>().AnyAsync(b => b.Name == request.Name, cancellationToken);
+
+        if (any) throw new AlreadyExistsException();
+
         var colony = await repository.InsertAsync(request.ToEntity(), cancellationToken);
 
         await repository.CommitChangesAsync(cancellationToken);
@@ -30,7 +35,7 @@ internal sealed class ColonyService(IRepository repository) : IColonyService
             .QueryAll<Colony>()
             .AnyAsync(c => c.Id != id && c.Name == request.Name, cancellationToken);
 
-        if (any) throw new Exception("Name is already taken");
+        if (any) throw new AlreadyExistsException();
 
         var colony = await repository.GetByIdAsync<Colony>(id, cancellationToken);
 

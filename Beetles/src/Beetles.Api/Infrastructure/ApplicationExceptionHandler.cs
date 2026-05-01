@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Beetles.Application.Exceptions;
 
 namespace Beetles.Api.Infrastructure;
 
@@ -15,6 +16,7 @@ internal sealed class ApplicationExceptionHandler(ILogger<ApplicationExceptionHa
         {
             FluentValidation.ValidationException ex => Handle(httpContext, ex),
             Microsoft.EntityFrameworkCore.DbUpdateException ex => Handle(httpContext, ex),
+            AlreadyExistsException => Conflict(httpContext),
             _ => InternalServerError(httpContext, exception),
         };
 
