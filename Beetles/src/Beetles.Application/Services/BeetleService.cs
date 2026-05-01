@@ -16,18 +16,18 @@ internal class BeetleService(IRepository repository) : IBeetleService
             .Select(b => b.ToResponse())
             .ToListAsync(cancellationToken);
 
-    public async Task<BeetleResponse> GetByIdAsync(int id, CancellationToken cancellationToken)
-    {
-        var beetle = await repository.GetByIdAsync<Beetle>(id, cancellationToken);
+    private async Task<Beetle> GetAsync(int id, CancellationToken cancellationToken)
+        => await repository.QueryAll<Beetle>().FirstOrDefaultAsync(b => b.Id == id, cancellationToken)
+            ?? throw new NotFoundException();
 
-        return beetle.ToResponse();
-    }
+    public async Task<BeetleResponse> GetByIdAsync(int id, CancellationToken cancellationToken)
+        => (await GetAsync(id, cancellationToken)).ToResponse();
 
     public async Task<BeetleResponse> CreateAsync(BeetleRequest request, CancellationToken cancellationToken)
     {
         bool any = await repository.QueryAll<Beetle>().AnyAsync(e => e.Name == request.Name, cancellationToken);
 
-        if (any) throw new AlreadyExistsException();
+        if (any) throw new ConflictException();
 
         var beetle = await repository.InsertAsync(request.ToEntity(), cancellationToken);
 
@@ -45,9 +45,9 @@ internal class BeetleService(IRepository repository) : IBeetleService
             .QueryAll<Beetle>()
             .AnyAsync(e => e.Id != id && e.Name == request.Name, cancellationToken);
 
-        if (any) throw new AlreadyExistsException();
+        if (any) throw new ConflictException();
 
-        var beetle = await repository.GetByIdAsync<Beetle>(id, cancellationToken);
+        var beetle = await GetAsync(id, cancellationToken);
 
         beetle.Name = request.Name;
 

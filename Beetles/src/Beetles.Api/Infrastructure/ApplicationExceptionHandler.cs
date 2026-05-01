@@ -16,7 +16,7 @@ internal sealed class ApplicationExceptionHandler(ILogger<ApplicationExceptionHa
         {
             FluentValidation.ValidationException ex => Handle(httpContext, ex),
             Microsoft.EntityFrameworkCore.DbUpdateException ex => Handle(httpContext, ex),
-            AlreadyExistsException => Conflict(httpContext),
+            IApplicationException ex => Handle(httpContext, ex),
             _ => InternalServerError(httpContext, exception),
         };
 
@@ -51,20 +51,20 @@ internal sealed class ApplicationExceptionHandler(ILogger<ApplicationExceptionHa
         return exception.InnerException switch
         {
             Npgsql.PostgresException ex when ex.SqlState is Npgsql.PostgresErrorCodes.ExclusionViolation
-                => Conflict(httpContext),
+                => Handle(httpContext, new ConflictException()),
             _ => InternalServerError(httpContext, exception),
         };
     }
 
-    private static ProblemDetails Conflict(HttpContext httpContext)
+    private static ProblemDetails Handle(HttpContext httpContext, IApplicationException exception)
     {
-        httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+        httpContext.Response.StatusCode = exception.StatusCode;
 
         return new ProblemDetails
         {
-            Title = "Conflict",
+            Title = exception.Title,
             Status = httpContext.Response.StatusCode,
-            Detail = "The resource already exists or conflicts with existing data",
+            Detail = exception.Message,
             Instance = httpContext.Request.Path,
         };
     }
