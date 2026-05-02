@@ -7,6 +7,8 @@ namespace Beetles.Api.Infrastructure;
 
 internal sealed class ApplicationExceptionHandler(ILogger<ApplicationExceptionHandler> logger) : IExceptionHandler
 {
+    private const string ProblemJson = "application/problem+json";
+
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext,
         Exception exception,
@@ -20,7 +22,12 @@ internal sealed class ApplicationExceptionHandler(ILogger<ApplicationExceptionHa
             _ => InternalServerError(httpContext, exception),
         };
 
-        await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
+        await httpContext.Response.WriteAsJsonAsync(
+            value: problemDetails,
+            type: problemDetails.GetType(),
+            options: null,
+            contentType: ProblemJson,
+            cancellationToken: cancellationToken);
 
         return true;
     }
@@ -39,7 +46,6 @@ internal sealed class ApplicationExceptionHandler(ILogger<ApplicationExceptionHa
         {
             Title = "Validation Failed",
             Status = httpContext.Response.StatusCode,
-            Detail = exception.Message,
             Instance = httpContext.Request.Path,
         };
     }

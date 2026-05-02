@@ -1,6 +1,7 @@
 using Beetles.Application.Common.Interfaces;
 using Beetles.Application.Requests;
 using Beetles.Application.Responses;
+using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Beetles.Api.Endpoints;
@@ -24,9 +25,12 @@ internal static partial class IEndpointRouteBuilderExtensions
 
             beetleColonies.MapPost("/", async Task<NoContent> (
                 BeetleColonyRequest request,
+                IValidator<BeetleColonyRequest> validator,
                 IBeetleColonyService service,
                 CancellationToken cancellationToken) =>
                 {
+                    await validator.ValidateAndThrowAsync(request, cancellationToken);
+
                     await service.CreateAsync(request, cancellationToken);
 
                     return TypedResults.NoContent();
