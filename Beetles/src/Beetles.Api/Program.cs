@@ -27,6 +27,5 @@ app.UseExceptionHandler();
 
 app.MapBeetleEndpoints();
 app.MapColonyEndpoints();
-app.MapBeetleColonyEndpoints();
 
 app.Run();

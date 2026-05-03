@@ -16,12 +16,8 @@ internal class BeetleService(IRepository repository) : IBeetleService
             .Select(b => b.ToResponse())
             .ToListAsync(cancellationToken);
 
-    private async Task<Beetle> GetAsync(int id, CancellationToken cancellationToken)
-        => await repository.QueryAll<Beetle>().FirstOrDefaultAsync(b => b.Id == id, cancellationToken)
-            ?? throw new NotFoundException();
-
     public async Task<BeetleResponse> GetByIdAsync(int id, CancellationToken cancellationToken)
-        => (await GetAsync(id, cancellationToken)).ToResponse();
+        => (await repository.GetByIdAsync<Beetle>(id, cancellationToken)).ToResponse();
 
     public async Task<BeetleResponse> CreateAsync(BeetleRequest request, CancellationToken cancellationToken)
     {
@@ -47,7 +43,7 @@ internal class BeetleService(IRepository repository) : IBeetleService
 
         if (any) throw new ConflictException();
 
-        var beetle = await GetAsync(id, cancellationToken);
+        var beetle = await repository.GetByIdAsync<Beetle>(id, cancellationToken);
 
         beetle.Name = request.Name;
 

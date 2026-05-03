@@ -29,12 +29,8 @@ internal sealed class ColonyService(IRepository repository) : IColonyService
         return colony.ToResponse();
     }
 
-    private async Task<Colony> GetAsync(int id, CancellationToken cancellationToken)
-        => await repository.QueryAll<Colony>().FirstOrDefaultAsync(b => b.Id == id, cancellationToken)
-            ?? throw new NotFoundException();
-
     public async Task<ColonyResponse> GetByIdAsync(int id, CancellationToken cancellationToken)
-        => (await GetAsync(id, cancellationToken)).ToResponse();
+        => (await repository.GetByIdAsync<Colony>(id, cancellationToken)).ToResponse();
 
     public async Task<ColonyResponse> UpdateAsync(int id, ColonyRequest request, CancellationToken cancellationToken)
     {
@@ -44,7 +40,7 @@ internal sealed class ColonyService(IRepository repository) : IColonyService
 
         if (any) throw new ConflictException();
 
-        var colony = await GetAsync(id, cancellationToken);
+        var colony = await repository.GetByIdAsync<Colony>(id, cancellationToken);
 
         colony.Name = request.Name;
 

@@ -8,7 +8,6 @@ public sealed class DatabaseContext(DbContextOptions options) : DbContext(option
 {
     public DbSet<Beetle> Beetles { get; set; }
     public DbSet<Colony> Colonies { get; set; }
-    public DbSet<BeetleColony> BeetleColonies { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,6 +1,6 @@
 namespace Beetles.Domain.Entities;
 
-public interface IBitemporalEntity
+public interface IBitemporalEntity : IEntity
 {
     DateTimeOffset ValidFrom { get; set; }
     DateTimeOffset? ValidTo { get; set; }

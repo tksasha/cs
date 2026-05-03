@@ -1,4 +1,5 @@
 using Beetles.Application.Common.Interfaces;
+using Beetles.Application.Exceptions;
 using Beetles.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,16 @@ internal sealed class Repository(DatabaseContext context) : IRepository
         await context.Set<T>().AddAsync(entity, cancellationToken);
 
         return entity;
+    }
+
+    public async Task<T> GetByIdAsync<T>(int id, CancellationToken cancellationToken)
+        where T : class, IEntity
+    {
+        var entity = await context.Set<T>().FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+
+        if (entity is not null) return entity;
+
+        throw new NotFoundException();
     }
 
     public void Update<T>(T entity) where T : class, IEntity
