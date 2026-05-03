@@ -8,10 +8,14 @@ internal sealed class BeetleColonyConfiguration : IEntityTypeConfiguration<Beetl
 {
     public void Configure(EntityTypeBuilder<Beetle> builder)
     {
-        // builder.Property(b => b.ValidTo).HasDefaultValueSql("'infinity'::timestamptz");
+        builder.HasKey(b => new { b.Id, b.ValidFrom, b.RecordedFrom });
 
-        // builder.Property(b => b.RecordedFrom).HasDefaultValueSql("now()");
+        builder.Property(b => b.Id).UseIdentityByDefaultColumn();
 
-        // builder.Property(b => b.RecordedTo).HasDefaultValueSql("'infinity'::timestamptz");
+        builder.Property(b => b.ValidTo).HasDefaultValueSql("'infinity'::timestamptz");
+
+        builder.Property(b => b.RecordedFrom).HasDefaultValueSql("now()");
+
+        builder.Property(b => b.RecordedTo).HasDefaultValueSql("'infinity'::timestamptz");
     }
 }

@@ -11,20 +11,20 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Beetles.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20260429093049_CreateBeetles")]
-    partial class CreateBeetles
+    [Migration("20260503064402_CreateColonies")]
+    partial class CreateColonies
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.7")
+                .HasAnnotation("ProductVersion", "10.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Beetles.Domain.Entities.Beetle", b =>
+            modelBuilder.Entity("Beetles.Domain.Entities.Colony", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,9 +39,9 @@ namespace Beetles.Infrastructure.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Id")
-                        .HasName("pk_beetles");
+                        .HasName("pk_colonies");
 
-                    b.ToTable("beetles", (string)null);
+                    b.ToTable("colonies", (string)null);
                 });
 #pragma warning restore 612, 618
         }

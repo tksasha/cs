@@ -21,7 +21,9 @@ internal class BeetleService(IRepository repository) : IBeetleService
 
     public async Task<BeetleResponse> CreateAsync(BeetleRequest request, CancellationToken cancellationToken)
     {
-        bool any = await repository.QueryAll<Beetle>().AnyAsync(e => e.Name == request.Name, cancellationToken);
+        bool any = await repository.QueryAll<Beetle>()
+            .AnyAsync(e => e.Name == request.Name
+                && e.RecordedTo == DateTimeOffset.MaxValue, cancellationToken);
 
         if (any) throw new ConflictException();
 

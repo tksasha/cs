@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Diagnostics;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Beetles.Application.Exceptions;
 
@@ -18,6 +17,8 @@ internal sealed class ApplicationExceptionHandler(ILogger<ApplicationExceptionHa
         {
             FluentValidation.ValidationException ex => Handle(httpContext, ex),
             Microsoft.EntityFrameworkCore.DbUpdateException ex => Handle(httpContext, ex),
+            BadHttpRequestException
+                => Handle(httpContext, new BadRequestException()),
             IApplicationException ex => Handle(httpContext, ex),
             _ => InternalServerError(httpContext, exception),
         };
