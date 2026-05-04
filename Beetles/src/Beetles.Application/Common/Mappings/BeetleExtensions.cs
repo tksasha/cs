@@ -11,6 +11,7 @@ internal static class BeetleExtensions
             => new(
                 Id: beetle.Id,
                 Name: beetle.Name,
+                Colony: beetle.Colony!,
                 ValidFrom: beetle.ValidFrom,
                 ValidTo: beetle.ValidTo,
                 RecordedFrom: beetle.RecordedFrom,

@@ -18,9 +18,9 @@ public static class ServiceCollectionExtensions
             services.AddScoped<IBeetleService, BeetleService>();
             services.AddScoped<IColonyService, ColonyService>();
 
-            services.AddScoped<IValidator<BeetleRequest>, BeetleValidator>();
+            services.AddScoped<IValidator<BeetleRequest>, BeetleRequestValidator>();
             services.AddScoped<IValidator<CorrectBeetleRequest>, CorrectBeetleRequestValidator>();
-            services.AddScoped<IValidator<ColonyRequest>, ColonyValidator>();
+            services.AddScoped<IValidator<ColonyRequest>, ColonyRequestValidator>();
 
             return services;
         }

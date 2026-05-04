@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Beetles.Application.Validators;
 
-internal sealed class ColonyValidator : AbstractValidator<ColonyRequest>
+internal sealed class ColonyRequestValidator : AbstractValidator<ColonyRequest>
 {
-    public ColonyValidator()
+    public ColonyRequestValidator()
     {
         RuleFor(r => r.Name).NotEmpty();
     }
