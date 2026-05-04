@@ -23,13 +23,9 @@ internal sealed class BitemporalRepository(DatabaseContext context) : IBitempora
         return entities;
     }
 
-    public async Task<T> InsertAsync<T>(T entity, CancellationToken cancellationToken)
+    public async Task InsertAsync<T>(T entity, CancellationToken cancellationToken)
         where T : BitemporalEntity
-    {
-        await context.Set<T>().AddAsync(entity, cancellationToken);
-
-        return entity;
-    }
+        => await context.Set<T>().AddAsync(entity, cancellationToken);
 
     public async Task<T> GetByIdAsync<T>(int id, CancellationToken cancellationToken)
         where T : BitemporalEntity
