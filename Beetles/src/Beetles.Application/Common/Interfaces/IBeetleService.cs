@@ -5,7 +5,10 @@ namespace Beetles.Application.Common.Interfaces;
 
 public interface IBeetleService
 {
-    Task<List<BeetleResponse>> GetAllAsync(CancellationToken cancellationToken);
+    Task<List<BeetleResponse>> GetAllAsync(
+        CancellationToken cancellationToken,
+        DateTimeOffset? valid = null,
+        DateTimeOffset? recorded = null);
 
     Task<BeetleResponse> GetByIdAsync(int id, CancellationToken cancellationToken);
 

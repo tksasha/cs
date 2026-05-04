@@ -16,9 +16,11 @@ internal static partial class IEndpointRouteBuilderExtensions
 
             beetles.MapGet("/", async Task<Ok<List<BeetleResponse>>> (
                 IBeetleService service,
-                CancellationToken cancellationToken) =>
+                CancellationToken cancellationToken,
+                DateTimeOffset? valid = null,
+                DateTimeOffset? recorded = null) =>
             {
-                var beetles = await service.GetAllAsync(cancellationToken);
+                var beetles = await service.GetAllAsync(cancellationToken, valid, recorded);
 
                 return TypedResults.Ok(beetles);
             });

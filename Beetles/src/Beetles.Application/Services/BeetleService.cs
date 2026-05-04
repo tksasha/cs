@@ -10,9 +10,12 @@ namespace Beetles.Application.Services;
 
 internal class BeetleService(IBitemporalRepository repository) : IBeetleService
 {
-    public Task<List<BeetleResponse>> GetAllAsync(CancellationToken cancellationToken)
+    public Task<List<BeetleResponse>> GetAllAsync(
+        CancellationToken cancellationToken,
+        DateTimeOffset? valid = null,
+        DateTimeOffset? recorded = null)
         => repository
-            .QueryAll<Beetle>()
+            .QueryAll<Beetle>(valid, recorded)
             .Select(b => b.ToResponse())
             .ToListAsync(cancellationToken);
 
