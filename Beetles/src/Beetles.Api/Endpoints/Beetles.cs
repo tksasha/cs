@@ -12,9 +12,9 @@ internal static partial class IEndpointRouteBuilderExtensions
     {
         public IEndpointRouteBuilder MapBeetleEndpoints()
         {
-            var beatles = builder.MapGroup("/beetles").WithTags("Beetles");
+            var beetles = builder.MapGroup("/beetles").WithTags("Beetles");
 
-            beatles.MapGet("/", async Task<Ok<List<BeetleResponse>>> (
+            beetles.MapGet("/", async Task<Ok<List<BeetleResponse>>> (
                 IBeetleService service,
                 CancellationToken cancellationToken) =>
             {
@@ -23,7 +23,7 @@ internal static partial class IEndpointRouteBuilderExtensions
                 return TypedResults.Ok(beetles);
             });
 
-            beatles.MapPost("/", async Task<Created<BeetleResponse>> (
+            beetles.MapPost("/", async Task<Created<BeetleResponse>> (
                 IBeetleService service,
                 BeetleRequest request,
                 IValidator<BeetleRequest> validator,
@@ -33,10 +33,10 @@ internal static partial class IEndpointRouteBuilderExtensions
 
                 var response = await service.CreateAsync(request, cancellationToken);
 
-                return TypedResults.Created($"/{nameof(beatles)}/{response.Id}", response);
+                return TypedResults.Created($"/{nameof(beetles)}/{response.Id}", response);
             });
 
-            beatles.MapPatch("/{id}", async Task<Ok<BeetleResponse>> (
+            beetles.MapPatch("/{id}", async Task<Ok<BeetleResponse>> (
                 IBeetleService service,
                 int id,
                 BeetleRequest request,
@@ -48,6 +48,16 @@ internal static partial class IEndpointRouteBuilderExtensions
                     var response = await service.UpdateAsync(id, request, cancellationToken);
 
                     return TypedResults.Ok(response);
+                });
+
+            beetles.MapDelete("/{id}", async Task<NoContent> (
+                int id,
+                IBeetleService service,
+                CancellationToken cancellationToken) =>
+                {
+                    await service.DeleteAsync(id, cancellationToken);
+
+                    return TypedResults.NoContent();
                 });
 
             return builder;

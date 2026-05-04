@@ -13,7 +13,6 @@ internal class BeetleService(IBitemporalRepository repository) : IBeetleService
     public Task<List<BeetleResponse>> GetAllAsync(CancellationToken cancellationToken)
         => repository
             .QueryAll<Beetle>()
-            .Where(b => b.RecordedTo == DateTimeOffset.MaxValue)
             .Select(b => b.ToResponse())
             .ToListAsync(cancellationToken);
 
@@ -69,5 +68,12 @@ internal class BeetleService(IBitemporalRepository repository) : IBeetleService
         await repository.CommitChangesAsync(cancellationToken);
 
         return newVersion.ToResponse();
+    }
+
+    public async Task DeleteAsync(int id, CancellationToken cancellationToken)
+    {
+        await repository.DeleteAsync<Beetle>(id, cancellationToken);
+
+        await repository.CommitChangesAsync(cancellationToken);
     }
 }

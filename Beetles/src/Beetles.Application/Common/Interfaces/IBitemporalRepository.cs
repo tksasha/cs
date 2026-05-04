@@ -13,5 +13,7 @@ public interface IBitemporalRepository
     Task UpdateAsync<T>(T currentVersion, T newVersion, CancellationToken cancellationToken)
         where T : class, IBitemporalEntity;
 
+    Task DeleteAsync<T>(int id, CancellationToken cancellationToken) where T : class, IBitemporalEntity;
+
     Task CommitChangesAsync(CancellationToken cancellationToken);
 }

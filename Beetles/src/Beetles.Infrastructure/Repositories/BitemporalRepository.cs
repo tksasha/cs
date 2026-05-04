@@ -8,7 +8,7 @@ namespace Beetles.Infrastructure.Repositories;
 internal sealed class BitemporalRepository(DatabaseContext context) : IBitemporalRepository
 {
     public IQueryable<T> QueryAll<T>() where T : class, IBitemporalEntity
-        => context.Set<T>().AsNoTracking();
+        => context.Set<T>().AsNoTracking().Where(b => b.RecordedTo == DateTimeOffset.MaxValue);
 
     public async Task<T> InsertAsync<T>(T entity, CancellationToken cancellationToken)
         where T : class, IBitemporalEntity
@@ -55,6 +55,16 @@ internal sealed class BitemporalRepository(DatabaseContext context) : IBitempora
         newVersion.RecordedTo = DateTimeOffset.MaxValue;
 
         await context.Set<T>().AddAsync(newVersion, cancellationToken);
+    }
+
+    public async Task DeleteAsync<T>(int id, CancellationToken cancellationToken)
+        where T : class, IBitemporalEntity
+    {
+        var entity = await GetByIdAsync<T>(id, cancellationToken);
+
+        entity.RecordedTo = DateTimeOffset.UtcNow;
+
+        context.Set<T>().Update(entity);
     }
 
     public Task CommitChangesAsync(CancellationToken cancellationToken)
