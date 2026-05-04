@@ -42,11 +42,13 @@ internal class BeetleService(IBitemporalRepository repository) : IBeetleService
         return beetle.ToResponse();
     }
 
-    public async Task ValidateNameIsUnique(int id, string name, CancellationToken cancellationToken)
+    private async Task ValidateNameIsUnique(int id, string name, CancellationToken cancellationToken)
     {
         bool any = await repository
             .QueryAll<Beetle>()
-            .AnyAsync(e => e.Id != id && e.Name == name, cancellationToken);
+            .AnyAsync(e => e.Id != id
+                && e.Name == name
+                && e.RecordedTo == DateTimeOffset.MaxValue, cancellationToken);
 
         if (any) throw new ConflictException();
     }
@@ -64,9 +66,28 @@ internal class BeetleService(IBitemporalRepository repository) : IBeetleService
 
         newVersion.Name = request.Name;
         newVersion.ValidFrom = request.ValidFrom;
-        newVersion.ValidTo = request.ValidTo;
 
         await repository.UpdateAsync(currentVersion, newVersion, cancellationToken);
+
+        await repository.CommitChangesAsync(cancellationToken);
+
+        return newVersion.ToResponse();
+    }
+
+    public async Task<BeetleResponse> CorrectAsync(
+        int id,
+        CorrectBeetleRequest request,
+        CancellationToken cancellationToken)
+    {
+        await ValidateNameIsUnique(id, request.Name, cancellationToken);
+
+        var currentVersion = await repository.GetByIdAsync<Beetle>(id, cancellationToken);
+
+        var newVersion = currentVersion.CreateNewVersion();
+
+        newVersion.Name = request.Name;
+
+        await repository.CorrectAsync(currentVersion, newVersion, cancellationToken);
 
         await repository.CommitChangesAsync(cancellationToken);
 

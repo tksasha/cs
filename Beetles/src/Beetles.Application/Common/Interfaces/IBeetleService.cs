@@ -16,5 +16,7 @@ public interface IBeetleService
 
     Task<BeetleResponse> UpdateAsync(int Id, BeetleRequest request, CancellationToken cancellationToken);
 
+    Task<BeetleResponse> CorrectAsync(int id, CorrectBeetleRequest request, CancellationToken cancellationToken);
+
     Task DeleteAsync(int id, CancellationToken cancellationToken);
 }

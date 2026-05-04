@@ -52,6 +52,20 @@ internal static partial class IEndpointRouteBuilderExtensions
                     return TypedResults.Ok(response);
                 });
 
+            beetles.MapPost("/{id}/corrections", async Task<Created<BeetleResponse>> (
+                int id,
+                IValidator<CorrectBeetleRequest> validator,
+                CorrectBeetleRequest request,
+                IBeetleService service,
+                CancellationToken cancellationToken) =>
+                {
+                    await validator.ValidateAndThrowAsync(request, cancellationToken);
+
+                    var response = await service.CorrectAsync(id, request, cancellationToken);
+
+                    return TypedResults.Created($"{nameof(beetles)}/{response.Id}", response);
+                });
+
             beetles.MapDelete("/{id}", async Task<NoContent> (
                 int id,
                 IBeetleService service,

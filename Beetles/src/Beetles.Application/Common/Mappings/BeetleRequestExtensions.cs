@@ -8,6 +8,6 @@ internal static class BeetleRequestExtensions
     extension(BeetleRequest request)
     {
         public Beetle ToEntity()
-            => new() { Name = request.Name, ValidFrom = request.ValidFrom, ValidTo = request.ValidTo };
+            => new() { Name = request.Name, ValidFrom = request.ValidFrom };
     }
 }

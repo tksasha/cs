@@ -12,6 +12,10 @@ internal sealed class BitemporalRepository(DatabaseContext context) : IBitempora
     {
         var entities = context.Set<T>().AsNoTracking();
 
+        entities = valid is not null
+            ? entities.Where(e => e.ValidFrom <= valid && e.ValidTo > valid)
+            : entities.Where(e => e.ValidTo == DateTimeOffset.MaxValue);
+
         entities = recorded is not null
             ? entities.Where(e => e.RecordedFrom <= recorded && e.RecordedTo > recorded)
             : entities.Where(e => e.RecordedTo == DateTimeOffset.MaxValue);
@@ -50,16 +54,31 @@ internal sealed class BitemporalRepository(DatabaseContext context) : IBitempora
         if (any) throw new ConflictException();
     }
 
-
     public async Task UpdateAsync<T>(T currentVersion, T newVersion, CancellationToken cancellationToken)
         where T : BitemporalEntity
     {
         await ValidateValidFromIsUnique(newVersion, cancellationToken);
 
+        currentVersion.ValidTo = newVersion.ValidFrom;
+
+        context.Set<T>().Update(currentVersion);
+
+        newVersion.ValidTo = DateTimeOffset.MaxValue;
+        newVersion.RecordedFrom = DateTimeOffset.UtcNow;
+        newVersion.RecordedTo = DateTimeOffset.MaxValue;
+
+        await context.Set<T>().AddAsync(newVersion, cancellationToken);
+    }
+
+    public async Task CorrectAsync<T>(T currentVersion, T newVersion, CancellationToken cancellationToken)
+        where T : BitemporalEntity
+    {
         currentVersion.RecordedTo = DateTimeOffset.UtcNow;
 
         context.Set<T>().Update(currentVersion);
 
+        newVersion.ValidFrom = currentVersion.ValidFrom;
+        newVersion.ValidTo = currentVersion.ValidTo;
         newVersion.RecordedFrom = DateTimeOffset.UtcNow;
         newVersion.RecordedTo = DateTimeOffset.MaxValue;
 
