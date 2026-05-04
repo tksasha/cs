@@ -15,5 +15,8 @@ internal static class BeetleExtensions
                 ValidTo: beetle.ValidTo,
                 RecordedFrom: beetle.RecordedFrom,
                 RecordedTo: beetle.RecordedTo);
+
+        public Beetle CreateNewVersion()
+            => new() { Id = beetle.Id, Name = beetle.Name };
     }
 }

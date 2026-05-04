@@ -1,6 +1,6 @@
 namespace Beetles.Domain.Entities;
 
-public class Beetle : IEntity
+public class Beetle : IBitemporalEntity
 {
     public int Id { get; set; }
     public required string Name { get; set; }

@@ -10,7 +10,8 @@ public interface IBitemporalRepository
 
     Task<T> GetByIdAsync<T>(int id, CancellationToken cancellationToken) where T : class, IBitemporalEntity;
 
-    Task UpdateAsync<T>(T entity, CancellationToken cancellationToken) where T : class, IBitemporalEntity;
+    Task UpdateAsync<T>(T currentVersion, T newVersion, CancellationToken cancellationToken)
+        where T : class, IBitemporalEntity;
 
     Task CommitChangesAsync(CancellationToken cancellationToken);
 }

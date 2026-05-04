@@ -31,18 +31,30 @@ internal sealed class BitemporalRepository(DatabaseContext context) : IBitempora
         throw new NotFoundException();
     }
 
-    public async Task UpdateAsync<T>(T entity, CancellationToken cancellationToken)
+    private async Task ValidateValidFromIsUnique<T>(T entity, CancellationToken cancellationToken)
         where T : class, IBitemporalEntity
     {
-        var current = await GetByIdAsync<T>(entity.Id, cancellationToken);
+        bool any = await context.Set<T>()
+            .AnyAsync(e => e.Id == entity.Id
+                && e.ValidFrom == entity.ValidFrom, cancellationToken);
 
-        current.RecordedTo = DateTimeOffset.MaxValue;
+        if (any) throw new ConflictException();
+    }
 
-        context.Set<T>().Update(current);
 
-        entity.RecordedFrom = DateTimeOffset.UtcNow;
+    public async Task UpdateAsync<T>(T currentVersion, T newVersion, CancellationToken cancellationToken)
+        where T : class, IBitemporalEntity
+    {
+        await ValidateValidFromIsUnique(newVersion, cancellationToken);
 
-        context.Set<T>().Update(entity);
+        currentVersion.RecordedTo = DateTimeOffset.UtcNow;
+
+        context.Set<T>().Update(currentVersion);
+
+        newVersion.RecordedFrom = DateTimeOffset.UtcNow;
+        newVersion.RecordedTo = DateTimeOffset.MaxValue;
+
+        await context.Set<T>().AddAsync(newVersion, cancellationToken);
     }
 
     public Task CommitChangesAsync(CancellationToken cancellationToken)

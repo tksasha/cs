@@ -8,24 +8,30 @@ using Beetles.Application.Exceptions;
 
 namespace Beetles.Application.Services;
 
-internal class BeetleService(IRepository repository) : IBeetleService
+internal class BeetleService(IBitemporalRepository repository) : IBeetleService
 {
     public Task<List<BeetleResponse>> GetAllAsync(CancellationToken cancellationToken)
         => repository
             .QueryAll<Beetle>()
+            .Where(b => b.RecordedTo == DateTimeOffset.MaxValue)
             .Select(b => b.ToResponse())
             .ToListAsync(cancellationToken);
 
     public async Task<BeetleResponse> GetByIdAsync(int id, CancellationToken cancellationToken)
         => (await repository.GetByIdAsync<Beetle>(id, cancellationToken)).ToResponse();
 
-    public async Task<BeetleResponse> CreateAsync(BeetleRequest request, CancellationToken cancellationToken)
+    private async Task ValidateNameIsUnique(string name, CancellationToken cancellationToken)
     {
         bool any = await repository.QueryAll<Beetle>()
-            .AnyAsync(e => e.Name == request.Name
+            .AnyAsync(e => e.Name == name
                 && e.RecordedTo == DateTimeOffset.MaxValue, cancellationToken);
 
         if (any) throw new ConflictException();
+    }
+
+    public async Task<BeetleResponse> CreateAsync(BeetleRequest request, CancellationToken cancellationToken)
+    {
+        await ValidateNameIsUnique(request.Name, cancellationToken);
 
         var beetle = await repository.InsertAsync(request.ToEntity(), cancellationToken);
 
@@ -34,25 +40,34 @@ internal class BeetleService(IRepository repository) : IBeetleService
         return beetle.ToResponse();
     }
 
+    public async Task ValidateNameIsUnique(int id, string name, CancellationToken cancellationToken)
+    {
+        bool any = await repository
+            .QueryAll<Beetle>()
+            .AnyAsync(e => e.Id != id && e.Name == name, cancellationToken);
+
+        if (any) throw new ConflictException();
+    }
+
     public async Task<BeetleResponse> UpdateAsync(
         int id,
         BeetleRequest request,
         CancellationToken cancellationToken)
     {
-        bool any = await repository
-            .QueryAll<Beetle>()
-            .AnyAsync(e => e.Id != id && e.Name == request.Name, cancellationToken);
+        await ValidateNameIsUnique(id, request.Name, cancellationToken);
 
-        if (any) throw new ConflictException();
+        var currentVersion = await repository.GetByIdAsync<Beetle>(id, cancellationToken);
 
-        var beetle = await repository.GetByIdAsync<Beetle>(id, cancellationToken);
+        var newVersion = currentVersion.CreateNewVersion();
 
-        beetle.Name = request.Name;
+        newVersion.Name = request.Name;
+        newVersion.ValidFrom = request.ValidFrom;
+        newVersion.ValidTo = request.ValidTo;
 
-        repository.Update(beetle);
+        await repository.UpdateAsync(currentVersion, newVersion, cancellationToken);
 
         await repository.CommitChangesAsync(cancellationToken);
 
-        return beetle.ToResponse();
+        return newVersion.ToResponse();
     }
 }
