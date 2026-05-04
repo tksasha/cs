@@ -15,6 +15,9 @@ builder.Services.AddApplication();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ApplicationExceptionHandler>();
 
+builder.Services.Configure<XTimeOptions>(builder.Configuration.GetSection("DateTimeOffset")); // TODO: delme
+builder.Services.AddSingleton<TimeProvider, XTimeProvider>(); // TODO: delme
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

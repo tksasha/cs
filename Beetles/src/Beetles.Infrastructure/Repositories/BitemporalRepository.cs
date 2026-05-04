@@ -5,7 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Beetles.Infrastructure.Repositories;
 
-internal sealed class BitemporalRepository(DatabaseContext context) : IBitemporalRepository
+internal sealed class BitemporalRepository(
+    DatabaseContext context,
+    TimeProvider timeProvider) : IBitemporalRepository
 {
     public IQueryable<T> QueryAll<T>(DateTimeOffset? valid = null, DateTimeOffset? recorded = null)
         where T : BitemporalEntity
@@ -25,7 +27,11 @@ internal sealed class BitemporalRepository(DatabaseContext context) : IBitempora
 
     public async Task InsertAsync<T>(T entity, CancellationToken cancellationToken)
         where T : BitemporalEntity
-        => await context.Set<T>().AddAsync(entity, cancellationToken);
+    {
+        entity.RecordedFrom = timeProvider.GetUtcNow();
+
+        await context.Set<T>().AddAsync(entity, cancellationToken);
+    }
 
     public async Task<T> GetByIdAsync<T>(int id, CancellationToken cancellationToken)
         where T : BitemporalEntity
