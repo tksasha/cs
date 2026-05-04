@@ -8,10 +8,11 @@ namespace Beetles.Infrastructure.Repositories;
 
 internal sealed class Repository(DatabaseContext context) : IRepository
 {
-    public IQueryable<T> QueryAll<T>() where T : class, IEntity
+    public IQueryable<T> QueryAll<T>() where T : Entity
         => context.Set<T>().AsNoTracking();
 
-    public async Task<T> InsertAsync<T>(T entity, CancellationToken cancellationToken) where T : class, IEntity
+    public async Task<T> InsertAsync<T>(T entity, CancellationToken cancellationToken)
+        where T : Entity
     {
         await context.Set<T>().AddAsync(entity, cancellationToken);
 
@@ -19,7 +20,7 @@ internal sealed class Repository(DatabaseContext context) : IRepository
     }
 
     public async Task<T> GetByIdAsync<T>(int id, CancellationToken cancellationToken)
-        where T : class, IEntity
+        where T : Entity
     {
         var entity = await context.Set<T>().FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
 
@@ -28,7 +29,7 @@ internal sealed class Repository(DatabaseContext context) : IRepository
         throw new NotFoundException();
     }
 
-    public void Update<T>(T entity) where T : class, IEntity
+    public void Update<T>(T entity) where T : Entity
         => context.Set<T>().Update(entity);
 
     public Task CommitChangesAsync(CancellationToken cancellationToken)

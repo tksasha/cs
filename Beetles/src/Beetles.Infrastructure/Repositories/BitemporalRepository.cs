@@ -8,7 +8,7 @@ namespace Beetles.Infrastructure.Repositories;
 internal sealed class BitemporalRepository(DatabaseContext context) : IBitemporalRepository
 {
     public IQueryable<T> QueryAll<T>(DateTimeOffset? valid = null, DateTimeOffset? recorded = null)
-        where T : class, IBitemporalEntity
+        where T : BitemporalEntity
     {
         var entities = context.Set<T>().AsNoTracking();
 
@@ -20,7 +20,7 @@ internal sealed class BitemporalRepository(DatabaseContext context) : IBitempora
     }
 
     public async Task<T> InsertAsync<T>(T entity, CancellationToken cancellationToken)
-        where T : class, IBitemporalEntity
+        where T : BitemporalEntity
     {
         await context.Set<T>().AddAsync(entity, cancellationToken);
 
@@ -28,7 +28,7 @@ internal sealed class BitemporalRepository(DatabaseContext context) : IBitempora
     }
 
     public async Task<T> GetByIdAsync<T>(int id, CancellationToken cancellationToken)
-        where T : class, IBitemporalEntity
+        where T : BitemporalEntity
     {
         var entity = await context.Set<T>()
             .FirstOrDefaultAsync(e => e.Id == id
@@ -41,7 +41,7 @@ internal sealed class BitemporalRepository(DatabaseContext context) : IBitempora
     }
 
     private async Task ValidateValidFromIsUnique<T>(T entity, CancellationToken cancellationToken)
-        where T : class, IBitemporalEntity
+        where T : BitemporalEntity
     {
         bool any = await context.Set<T>()
             .AnyAsync(e => e.Id == entity.Id
@@ -52,7 +52,7 @@ internal sealed class BitemporalRepository(DatabaseContext context) : IBitempora
 
 
     public async Task UpdateAsync<T>(T currentVersion, T newVersion, CancellationToken cancellationToken)
-        where T : class, IBitemporalEntity
+        where T : BitemporalEntity
     {
         await ValidateValidFromIsUnique(newVersion, cancellationToken);
 
@@ -67,7 +67,7 @@ internal sealed class BitemporalRepository(DatabaseContext context) : IBitempora
     }
 
     public async Task DeleteAsync<T>(int id, CancellationToken cancellationToken)
-        where T : class, IBitemporalEntity
+        where T : BitemporalEntity
     {
         var entity = await GetByIdAsync<T>(id, cancellationToken);
 
