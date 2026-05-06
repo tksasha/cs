@@ -11,5 +11,11 @@ internal sealed class WallConfiguration : IEntityTypeConfiguration<Wall>
         builder.HasKey(b => new { b.Id, b.BusinessStart, b.BusinessEnd });
 
         builder.Property(b => b.Id).UseIdentityByDefaultColumn();
+
+        builder.Property(b => b.BusinessEnd).HasDefaultValueSql("'infinity'::timestamptz");
+
+        builder.Property(b => b.SystemStart).HasDefaultValueSql("now()");
+
+        builder.Property(b => b.SystemEnd).HasDefaultValueSql("'infinity'::timestamptz");
     }
 }
