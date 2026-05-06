@@ -28,8 +28,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseExceptionHandler();
 
-app.MapBeetleEndpoints();
-app.MapColonyEndpoints();
 app.MapWallEndpoints();
 
 app.Run();

@@ -9,6 +9,6 @@ public class WallRequestValidator : AbstractValidator<WallRequest>
     {
         RuleFor(r => r.Color).NotEmpty();
 
-        RuleFor(r => r.ValidFrom).Must(d => d.Offset == TimeSpan.Zero);
+        RuleFor(r => r.BusinessStart).Must(d => d.Offset == TimeSpan.Zero);
     }
 }

@@ -15,13 +15,8 @@ public static class ServiceCollectionExtensions
     {
         public IServiceCollection AddApplication()
         {
-            services.AddScoped<IBeetleService, BeetleService>();
-            services.AddScoped<IColonyService, ColonyService>();
             services.AddScoped<IWallService, WallService>();
 
-            services.AddScoped<IValidator<BeetleRequest>, BeetleRequestValidator>();
-            services.AddScoped<IValidator<CorrectBeetleRequest>, CorrectBeetleRequestValidator>();
-            services.AddScoped<IValidator<ColonyRequest>, ColonyRequestValidator>();
             services.AddScoped<IValidator<WallRequest>, WallRequestValidator>();
 
             return services;

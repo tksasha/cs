@@ -6,8 +6,6 @@ namespace Beetles.Infrastructure;
 
 public sealed class DatabaseContext(DbContextOptions options) : DbContext(options)
 {
-    public DbSet<Beetle> Beetles { get; set; }
-    public DbSet<Colony> Colonies { get; set; }
     public DbSet<Wall> Walls { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

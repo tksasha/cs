@@ -11,10 +11,10 @@ public static class WallExtensions
         {
             Id = wall.Id,
             Color = wall.Color,
-            ValidFrom = wall.ValidFrom,
-            ValidTo = wall.ValidTo,
-            RecordedFrom = wall.RecordedFrom,
-            RecordedTo = wall.RecordedTo,
+            BusinessStart = wall.BusinessStart,
+            BusinessEnd = wall.BusinessEnd,
+            SystemStart = wall.SystemStart,
+            SystemEnd = wall.SystemEnd,
         };
     }
 }

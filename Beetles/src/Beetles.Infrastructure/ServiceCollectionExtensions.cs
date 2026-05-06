@@ -19,7 +19,6 @@ public static class ServiceCollectionExtensions
                 .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>())
                 .UseSnakeCaseNamingConvention());
 
-            services.AddScoped<IRepository, Repository>();
             services.AddScoped<IBitemporalRepository, BitemporalRepository>();
 
             return services;
