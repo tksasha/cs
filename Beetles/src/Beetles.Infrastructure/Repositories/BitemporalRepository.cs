@@ -61,7 +61,7 @@ internal sealed class BitemporalRepository(
     {
         await ValidateValidFromIsUnique(newVersion, cancellationToken);
 
-        currentVersion.ValidTo = newVersion.ValidFrom;
+        currentVersion.RecordedTo = timeProvider.GetUtcNow();
 
         context.Set<T>().Update(currentVersion);
 
