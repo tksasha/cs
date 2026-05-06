@@ -25,11 +25,12 @@ internal sealed class BitemporalRepository(
         await context.Set<T>().AddAsync(entity, cancellationToken);
     }
 
-    public async Task<T> GetAsync<T>(int id, CancellationToken cancellationToken)
+    public async Task<T> GetAsync<T>(int id, DateTimeOffset date, CancellationToken cancellationToken)
         where T : BitemporalEntity
     => await context.Set<T>()
         .FirstOrDefaultAsync(e => e.Id == id
-            && e.BusinessEnd == DateTimeOffset.MaxValue
+            && e.BusinessStart <= date
+            && e.BusinessEnd > date
             && e.SystemEnd == DateTimeOffset.MaxValue, cancellationToken)
         ?? throw new NotFoundException();
 
@@ -44,7 +45,7 @@ internal sealed class BitemporalRepository(
     public async Task UpdateAsync<T>(T entity, CancellationToken cancellationToken)
         where T : BitemporalEntity
     {
-        var actual = await GetAsync<T>(entity.Id, cancellationToken);
+        var actual = await GetAsync<T>(entity.Id, entity.BusinessStart, cancellationToken);
 
         actual.SystemEnd = timeProvider.GetUtcNow();
 

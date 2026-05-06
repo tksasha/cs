@@ -47,6 +47,9 @@ namespace Beetles.Infrastructure.Migrations
                         business_period WITH &&,
                         system_period WITH &&
                     );
+
+                ALTER TABLE walls
+                    ADD COLUMN transaction_id bigint GENERATED ALWAYS AS IDENTITY;
             ");
         }
 
