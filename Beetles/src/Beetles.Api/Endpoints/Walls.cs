@@ -27,6 +27,20 @@ internal static class IEntpointRouteBuilderExtensions
                     return TypedResults.Created($"/{nameof(walls)}/{response.Id}", response);
                 });
 
+            walls.MapPatch("/{id}", async Task<Ok<WallResponse>> (
+                int id,
+                IValidator<WallRequest> validator,
+                WallRequest request,
+                IWallService service,
+                CancellationToken cancellationToken) =>
+                {
+                    await validator.ValidateAndThrowAsync(request, cancellationToken);
+
+                    var response = await service.UpdateAsync(id, request, cancellationToken);
+
+                    return TypedResults.Ok(response);
+                });
+
             return builder;
         }
     }
