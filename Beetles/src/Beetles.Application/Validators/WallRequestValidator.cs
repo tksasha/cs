@@ -3,12 +3,14 @@ using FluentValidation;
 
 namespace Beetles.Application.Validators;
 
-public class WallRequestValidator : AbstractValidator<WallRequest>
+internal sealed class WallRequestValidator : AbstractValidator<WallRequest>
 {
     public WallRequestValidator()
     {
         RuleFor(r => r.Color).NotEmpty();
 
-        RuleFor(r => r.BusinessStart).Must(d => d.Offset == TimeSpan.Zero);
+        RuleFor(r => r.BusinessStart)
+            .Must(d => d.Offset == TimeSpan.Zero)
+            .WithMessage("Must be UTC.");
     }
 }
