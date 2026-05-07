@@ -6,6 +6,7 @@
     <Project Path="src/Beetles.Infrastructure/Beetles.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Beetles.Api.Tests/Beetles.Api.Tests.csproj" />
     <Project Path="tests/Beetles.Application.Tests/Beetles.Application.Tests.csproj" />
   </Folder>
 </Solution>
