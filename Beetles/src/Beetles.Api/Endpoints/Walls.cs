@@ -1,7 +1,9 @@
 using Beetles.Application.Common.Interfaces;
 using Beetles.Application.Requests;
 using Beetles.Application.Responses;
+
 using FluentValidation;
+
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Beetles.Api.Endpoints;

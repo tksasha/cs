@@ -1,10 +1,10 @@
 using Beetles.Application.Common.Interfaces;
 using Beetles.Application.Requests;
-using Beetles.Application.Responses;
 using Beetles.Application.Services;
 using Beetles.Application.Validators;
-using Beetles.Domain.Entities;
+
 using FluentValidation;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Beetles.Application;

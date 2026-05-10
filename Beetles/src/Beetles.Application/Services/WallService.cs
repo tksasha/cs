@@ -2,7 +2,6 @@ using Beetles.Application.Common.Interfaces;
 using Beetles.Application.Common.Mappings;
 using Beetles.Application.Requests;
 using Beetles.Application.Responses;
-using Beetles.Domain.Entities;
 
 namespace Beetles.Application.Services;
 

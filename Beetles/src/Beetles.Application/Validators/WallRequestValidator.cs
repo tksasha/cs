@@ -1,4 +1,5 @@
 using Beetles.Application.Requests;
+
 using FluentValidation;
 
 namespace Beetles.Application.Validators;

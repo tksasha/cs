@@ -1,9 +1,12 @@
 using Beetles.Application.Common.Interfaces;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+
 using Moq;
+
 using Testcontainers.PostgreSql;
 
 namespace Beetles.Infrastructure.Tests.Fixtures;

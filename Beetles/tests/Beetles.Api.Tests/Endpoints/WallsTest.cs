@@ -1,4 +1,5 @@
 using Beetles.Api.Tests.Fixtures;
+
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace Beetles.Api.Tests.Endpoints;

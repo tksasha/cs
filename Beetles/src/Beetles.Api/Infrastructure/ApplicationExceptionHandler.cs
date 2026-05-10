@@ -1,6 +1,7 @@
+using Beetles.Application.Exceptions;
+
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Beetles.Application.Exceptions;
 
 namespace Beetles.Api.Infrastructure;
 

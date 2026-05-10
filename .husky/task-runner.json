@@ -12,6 +12,17 @@
       "include": [
         "**/*.cs"
       ]
+    },
+    {
+      "name": "dotnet-format-beetles-verify",
+      "command": "dotnet",
+      "args": [
+        "format",
+        "Beetles/Beetles.slnx",
+        "--verify-no-changed",
+        "--include",
+        "${staged}"
+      ]
     }
   ]
 }

@@ -1,5 +1,7 @@
 using Beetles.Application.Requests;
+
 using FluentValidation;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Beetles.Application.Tests.Validators;

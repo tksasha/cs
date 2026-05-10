@@ -1,7 +1,9 @@
 using Beetles.Infrastructure;
-using Testcontainers.PostgreSql;
-using Microsoft.EntityFrameworkCore;
+
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+
+using Testcontainers.PostgreSql;
 
 namespace Beetles.Api.Tests.Fixtures;
 
