@@ -19,7 +19,7 @@
       "args": [
         "format",
         "Beetles/Beetles.slnx",
-        "--verify-no-changed",
+        "--verify-no-changes",
         "--include",
         "${staged}"
       ]
