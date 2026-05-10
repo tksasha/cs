@@ -22,6 +22,9 @@
         "--verify-no-changes",
         "--include",
         "${staged}"
+      ],
+      "include": [
+        "**/*.cs"
       ]
     }
   ]
