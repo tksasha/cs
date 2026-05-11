@@ -2,6 +2,7 @@ using Beetles.Application.Common.Interfaces;
 using Beetles.Application.Common.Mappings;
 using Beetles.Application.Requests;
 using Beetles.Application.Responses;
+using Beetles.Domain.Entities;
 
 namespace Beetles.Application.Services;
 
@@ -28,5 +29,12 @@ public sealed class WallService(IBitemporalRepository repository) : IWallService
         await repository.CommitChangesAsync(cancellationToken);
 
         return wall.ToResponse();
+    }
+
+    public async Task DeleteAsync(int id, DateTimeOffset date, CancellationToken cancellationToken)
+    {
+        await repository.DeleteAsync<Wall>(id, date, cancellationToken);
+
+        await repository.CommitChangesAsync(cancellationToken);
     }
 }

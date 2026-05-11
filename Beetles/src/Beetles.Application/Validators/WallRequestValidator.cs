@@ -11,7 +11,6 @@ internal sealed class WallRequestValidator : AbstractValidator<WallRequest>
         RuleFor(r => r.Color).NotEmpty();
 
         RuleFor(r => r.BusinessStart)
-            .Must(d => d.Offset == TimeSpan.Zero)
-            .WithMessage("Must be UTC.");
+            .SetValidator(new DateTimeOffsetValidator());
     }
 }

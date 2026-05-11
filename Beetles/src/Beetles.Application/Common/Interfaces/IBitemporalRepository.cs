@@ -16,5 +16,8 @@ public interface IBitemporalRepository
     Task<T> GetAsync<T>(int id, DateTimeOffset date, CancellationToken cancellationToken)
         where T : BitemporalEntity;
 
+    Task DeleteAsync<T>(int id, DateTimeOffset date, CancellationToken cancellationToken)
+        where T : BitemporalEntity;
+
     Task CommitChangesAsync(CancellationToken cancellationToken);
 }

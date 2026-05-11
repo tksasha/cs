@@ -18,6 +18,7 @@ public static class ServiceCollectionExtensions
             services.AddScoped<IWallService, WallService>();
 
             services.AddScoped<IValidator<WallRequest>, WallRequestValidator>();
+            services.AddScoped<IValidator<DateTimeOffset>, DateTimeOffsetValidator>();
 
             return services;
         }

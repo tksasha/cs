@@ -44,7 +44,7 @@ internal sealed class BitemporalRepository(
             && e.SystemEnd == DateTimeOffset.MaxValue, cancellationToken)
         ?? throw new NotFoundException();
 
-    private async Task Supersede<T>(T entity)
+    private void Supersede<T>(T entity)
         where T : BitemporalEntity
     {
         entity.SystemEnd = timeProvider.GetUtcNow();
@@ -59,24 +59,25 @@ internal sealed class BitemporalRepository(
 
         var entity = (T)actual.Clone();
         entity.BusinessEnd = businessStart;
-        entity.SystemStart = timeProvider.GetUtcNow();
         entity.SystemEnd = DateTimeOffset.MaxValue;
         entity.TransactionId = 0;
 
         await InsertAsync(entity, cancellationToken);
     }
 
-    public async Task AppendAsync<T>(T entity, DateTimeOffset businessEnd, CancellationToken cancellationToken)
+    private Task AppendAsync<T>(T entity, CancellationToken cancellationToken) where T : BitemporalEntity
+        => AppendAsync(entity, DateTimeOffset.MaxValue, cancellationToken);
+
+    private async Task AppendAsync<T>(T entity, DateTimeOffset businessEnd, CancellationToken cancellationToken)
         where T : BitemporalEntity
     {
-        entity.BusinessEnd = businessEnd == DateTimeOffset.MaxValue
-            ? DateTimeOffset.MaxValue
-            : businessEnd;
-        entity.SystemStart = timeProvider.GetUtcNow();
-        entity.SystemEnd = DateTimeOffset.MaxValue;
-        entity.TransactionId = 0;
+        var clone = (T)entity.Clone();
 
-        await InsertAsync(entity, cancellationToken);
+        clone.BusinessEnd = businessEnd;
+        clone.SystemEnd = DateTimeOffset.MaxValue;
+        clone.TransactionId = 0;
+
+        await InsertAsync(clone, cancellationToken);
     }
 
     public async Task UpdateAsync<T>(T entity, CancellationToken cancellationToken)
@@ -84,11 +85,26 @@ internal sealed class BitemporalRepository(
     {
         var actual = await GetAsync<T>(entity.Id, entity.BusinessStart, cancellationToken);
 
-        await Supersede(actual);
+        Supersede(actual);
 
         await CloseAsync(actual, entity.BusinessStart, cancellationToken);
 
         await AppendAsync(entity, actual.BusinessEnd ?? DateTimeOffset.MaxValue, cancellationToken);
+    }
+
+    public async Task DeleteAsync<T>(int id, DateTimeOffset date, CancellationToken cancellationToken)
+        where T : BitemporalEntity
+    {
+        await context.Set<T>().Where(e =>
+            e.Id == id
+            && e.BusinessStart <= date
+            && e.BusinessEnd >= date
+            && e.SystemEnd == DateTimeOffset.MaxValue
+        ).ForEachAsync(Supersede, cancellationToken);
+
+        var actual = await GetAsync<T>(id, date.AddDays(-1), cancellationToken);
+
+        await AppendAsync(actual, cancellationToken);
     }
 
     public Task CommitChangesAsync(CancellationToken cancellationToken)

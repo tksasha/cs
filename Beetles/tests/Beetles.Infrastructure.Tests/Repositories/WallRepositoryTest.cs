@@ -124,6 +124,33 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : IAsyncLifetime
         );
     }
 
+    [Fact]
+    public async Task ShouldDeleteAsync()
+    {
+        await CreateRedWallAsync(CancellationToken.None);
+        await UpdateBlueWallAsync(CancellationToken.None);
+        await UpdateBlackWallAsync(CancellationToken.None);
+        await UpdateWhiteWallAsync(CancellationToken.None);
+        await UpdateYellowWallAsync(CancellationToken.None);
+
+        await DeleteAsync(CancellationToken.None);
+
+        var walls = await _repository.QueryAll<Wall>().ToListAsync(CancellationToken.None);
+
+        Assert.Multiple(
+            () => Assert.Equal(9, walls.Count),
+            () => Assert.Contains(walls, SupersededRedWall),
+            () => Assert.Contains(walls, ClosedRedWall),
+            () => Assert.Contains(walls, SupersedBlueWall),
+            () => Assert.Contains(walls, DeadBlueWall),
+            () => Assert.Contains(walls, SupersedBlackWall),
+            () => Assert.Contains(walls, DeadBlueWall2),
+            () => Assert.Contains(walls, DeadWhiteWall),
+            () => Assert.Contains(walls, ClosedYellowWall),
+            () => Assert.Contains(walls, WhiteWall)
+        );
+    }
+
     private static DateTimeOffset Date(string date)
         => DateTimeOffset.ParseExact(
             $"{date}, 00:00Z",
@@ -206,6 +233,19 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : IAsyncLifetime
         _timeProviderMock.Verify(p => p.GetUtcNow());
     }
 
+    private async Task DeleteAsync(CancellationToken cancellationToken)
+    {
+        _timeProviderMock
+            .Setup(p => p.GetUtcNow())
+            .Returns(Date("25 Jun 2025"));
+
+        await _repository.DeleteAsync<Wall>(1, Date("13 Jun 2025"), cancellationToken);
+
+        await _repository.CommitChangesAsync(cancellationToken);
+
+        _timeProviderMock.Verify(p => p.GetUtcNow());
+    }
+
     private static bool RedWall(Wall wall)
         => wall.Id == 1
         && wall.Color == "red"
@@ -221,7 +261,6 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : IAsyncLifetime
         && wall.BusinessEnd == Infinity
         && wall.SystemStart == Date("10 May 2025")
         && wall.SystemEnd == Date("11 May 2025");
-
 
     private static bool ClosedRedWall(Wall wall)
         => wall.Id == 1
@@ -302,4 +341,28 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : IAsyncLifetime
         && wall.BusinessEnd == Date("1 Jun 2025")
         && wall.SystemStart == Date("18 Jun 2025")
         && wall.SystemEnd == Date("20 Jun 2025");
+
+    private static bool SupersedBlackWall(Wall wall)
+        => wall.Id == 1
+        && wall.Color == "black"
+        && wall.BusinessStart == Date("13 Jun 2025")
+        && wall.BusinessEnd == Infinity
+        && wall.SystemStart == Date("15 Jun 2025")
+        && wall.SystemEnd == Date("25 Jun 2025");
+
+    private static bool DeadWhiteWall(Wall wall)
+        => wall.Id == 1
+        && wall.Color == "white"
+        && wall.BusinessStart == Date("1 Jun 2025")
+        && wall.BusinessEnd == Date("13 Jun 2025")
+        && wall.SystemStart == Date("18 Jun 2025")
+        && wall.SystemEnd == Date("25 Jun 2025");
+
+    private static bool WhiteWall(Wall wall)
+        => wall.Id == 1
+        && wall.Color == "white"
+        && wall.BusinessStart == Date("1 Jun 2025")
+        && wall.BusinessEnd == Infinity
+        && wall.SystemStart == Date("25 Jun 2025")
+        && wall.SystemEnd == Infinity;
 }
