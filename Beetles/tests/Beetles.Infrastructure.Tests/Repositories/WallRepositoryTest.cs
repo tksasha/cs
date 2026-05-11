@@ -79,7 +79,7 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : IAsyncLifetime
     }
 
     [Fact]
-    public async Task ShouldUpdateWhiteWall()
+    public async Task ShouldUpdateWhiteWallAsync()
     {
         await CreateRedWallAsync(CancellationToken.None);
         await UpdateBlueWallAsync(CancellationToken.None);
@@ -89,14 +89,38 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : IAsyncLifetime
         var walls = await _repository.QueryAll<Wall>().ToListAsync(CancellationToken.None);
 
         Assert.Multiple(
-            // () => Assert.Equal(5, walls.Count),
+            () => Assert.Equal(7, walls.Count),
             () => Assert.Contains(walls, SupersededRedWall),
             () => Assert.Contains(walls, ClosedRedWall),
             () => Assert.Contains(walls, SupersedBlueWall),
             () => Assert.Contains(walls, DeadBlueWall),
             () => Assert.Contains(walls, BlackWall),
-            () => Assert.Contains(walls, OverclosedBlueWall),
+            () => Assert.Contains(walls, ClosedBlueWall2),
             () => Assert.Contains(walls, ClosedWhiteWall)
+        );
+    }
+
+    [Fact]
+    public async Task ShouldUpdateYellowWallAsync()
+    {
+        await CreateRedWallAsync(CancellationToken.None);
+        await UpdateBlueWallAsync(CancellationToken.None);
+        await UpdateBlackWallAsync(CancellationToken.None);
+        await UpdateWhiteWallAsync(CancellationToken.None);
+        await UpdateYellowWallAsync(CancellationToken.None);
+
+        var walls = await _repository.QueryAll<Wall>().ToListAsync(CancellationToken.None);
+
+        Assert.Multiple(
+            () => Assert.Equal(8, walls.Count),
+            () => Assert.Contains(walls, SupersededRedWall),
+            () => Assert.Contains(walls, ClosedRedWall),
+            () => Assert.Contains(walls, SupersedBlueWall),
+            () => Assert.Contains(walls, DeadBlueWall),
+            () => Assert.Contains(walls, BlackWall),
+            () => Assert.Contains(walls, DeadBlueWall2),
+            () => Assert.Contains(walls, ClosedWhiteWall),
+            () => Assert.Contains(walls, ClosedYellowWall)
         );
     }
 
@@ -159,6 +183,21 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : IAsyncLifetime
             .Returns(Date("18 Jun 2025"));
 
         var wall = new Wall { Id = 1, Color = "white", BusinessStart = Date("1 Jun 2025") };
+
+        await _repository.UpdateAsync(wall, cancellationToken);
+
+        await _repository.CommitChangesAsync(cancellationToken);
+
+        _timeProviderMock.Verify(p => p.GetUtcNow());
+    }
+
+    private async Task UpdateYellowWallAsync(CancellationToken cancellationToken)
+    {
+        _timeProviderMock
+            .Setup(p => p.GetUtcNow())
+            .Returns(Date("20 Jun 2025"));
+
+        var wall = new Wall { Id = 1, Color = "yellow", BusinessStart = Date("3 May 2025") };
 
         await _repository.UpdateAsync(wall, cancellationToken);
 
@@ -232,7 +271,7 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : IAsyncLifetime
         && wall.SystemStart == Date("15 Jun 2025")
         && wall.SystemEnd == Date("18 Jun 2025");
 
-    private static bool OverclosedBlueWall(Wall wall)
+    private static bool ClosedBlueWall2(Wall wall)
         => wall.Id == 1
         && wall.Color == "blue"
         && wall.BusinessStart == Date("3 May 2025")
@@ -247,4 +286,20 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : IAsyncLifetime
         && wall.BusinessEnd == Date("13 Jun 2025")
         && wall.SystemStart == Date("18 Jun 2025")
         && wall.SystemEnd == Infinity;
+
+    public static bool ClosedYellowWall(Wall wall)
+        => wall.Id == 1
+        && wall.Color == "yellow"
+        && wall.BusinessStart == Date("3 May 2025")
+        && wall.BusinessEnd == Date("1 Jun 2025")
+        && wall.SystemStart == Date("20 Jun 2025")
+        && wall.SystemEnd == Infinity;
+
+    private static bool DeadBlueWall2(Wall wall)
+        => wall.Id == 1
+        && wall.Color == "blue"
+        && wall.BusinessStart == Date("3 May 2025")
+        && wall.BusinessEnd == Date("1 Jun 2025")
+        && wall.SystemStart == Date("18 Jun 2025")
+        && wall.SystemEnd == Date("20 Jun 2025");
 }

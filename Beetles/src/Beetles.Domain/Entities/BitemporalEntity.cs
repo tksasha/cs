@@ -8,6 +8,8 @@ public abstract class BitemporalEntity : Entity, ICloneable
     public DateTimeOffset SystemStart { get; set; }
     public DateTimeOffset SystemEnd { get; set; }
 
+    public long TransactionId { get; set; }
+
     public virtual object Clone()
         => MemberwiseClone();
 }

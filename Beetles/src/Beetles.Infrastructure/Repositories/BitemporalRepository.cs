@@ -52,24 +52,29 @@ internal sealed class BitemporalRepository(
         context.Set<T>().Update(entity);
     }
 
-    private async Task CloseAsync<T>(T entity, DateTimeOffset businessEnd, CancellationToken cancellationToken)
+    private async Task CloseAsync<T>(T actual, DateTimeOffset businessStart, CancellationToken cancellationToken)
         where T : BitemporalEntity
     {
-        entity.BusinessEnd = businessEnd;
+        if (actual.BusinessStart == businessStart) return;
+
+        var entity = (T)actual.Clone();
+        entity.BusinessEnd = businessStart;
         entity.SystemStart = timeProvider.GetUtcNow();
         entity.SystemEnd = DateTimeOffset.MaxValue;
+        entity.TransactionId = 0;
 
-        await context.Set<T>().AddAsync(entity, cancellationToken);
+        await InsertAsync(entity, cancellationToken);
     }
 
-    private async Task AppendAsync<T>(T entity, CancellationToken cancellationToken)
+    public async Task AppendAsync<T>(T entity, DateTimeOffset businessEnd, CancellationToken cancellationToken)
         where T : BitemporalEntity
     {
-        var current = await GetAsync<T>(entity.Id, cancellationToken);
-
-        entity.BusinessEnd = current.BusinessStart > entity.BusinessStart
-            ? current.BusinessStart
-            : DateTimeOffset.MaxValue;
+        entity.BusinessEnd = businessEnd == DateTimeOffset.MaxValue
+            ? DateTimeOffset.MaxValue
+            : businessEnd;
+        entity.SystemStart = timeProvider.GetUtcNow();
+        entity.SystemEnd = DateTimeOffset.MaxValue;
+        entity.TransactionId = 0;
 
         await InsertAsync(entity, cancellationToken);
     }
@@ -81,9 +86,9 @@ internal sealed class BitemporalRepository(
 
         await Supersede(actual);
 
-        await CloseAsync((T)actual.Clone(), businessEnd: entity.BusinessStart, cancellationToken);
+        await CloseAsync(actual, entity.BusinessStart, cancellationToken);
 
-        await AppendAsync(entity, cancellationToken);
+        await AppendAsync(entity, actual.BusinessEnd ?? DateTimeOffset.MaxValue, cancellationToken);
     }
 
     public Task CommitChangesAsync(CancellationToken cancellationToken)

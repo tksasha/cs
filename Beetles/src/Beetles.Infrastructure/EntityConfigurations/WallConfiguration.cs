@@ -9,7 +9,7 @@ internal sealed class WallConfiguration : IEntityTypeConfiguration<Wall>
 {
     public void Configure(EntityTypeBuilder<Wall> builder)
     {
-        builder.HasKey(b => new { b.Id, b.BusinessStart, b.BusinessEnd });
+        builder.HasKey(b => new { b.TransactionId });
 
         builder.Property(b => b.Id).UseIdentityByDefaultColumn();
 

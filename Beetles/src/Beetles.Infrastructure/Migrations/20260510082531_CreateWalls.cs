@@ -1,5 +1,7 @@
 ﻿using System;
+
 using Microsoft.EntityFrameworkCore.Migrations;
+
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -16,17 +18,19 @@ namespace Beetles.Infrastructure.Migrations
                 name: "walls",
                 columns: table => new
                 {
+                    transaction_id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    color = table.Column<string>(type: "text", nullable: false),
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     business_start = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    business_end = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "'infinity'::timestamptz"),
-                    color = table.Column<string>(type: "text", nullable: false),
+                    business_end = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "'infinity'::timestamptz"),
                     system_start = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     system_end = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "'infinity'::timestamptz")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_walls", x => new { x.id, x.business_start, x.business_end });
+                    table.PrimaryKey("pk_walls", x => x.transaction_id);
                 });
 
             migrationBuilder.Sql(@"
@@ -47,9 +51,6 @@ namespace Beetles.Infrastructure.Migrations
                         business_period WITH &&,
                         system_period WITH &&
                     );
-
-                ALTER TABLE walls
-                    ADD COLUMN transaction_id bigint GENERATED ALWAYS AS IDENTITY;
             ");
         }
 
@@ -58,6 +59,8 @@ namespace Beetles.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "walls");
+
+            migrationBuilder.Sql("drop EXTENSION IF EXISTS btree_gist");
         }
     }
 }

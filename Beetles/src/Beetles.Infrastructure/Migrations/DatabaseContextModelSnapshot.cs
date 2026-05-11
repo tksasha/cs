@@ -24,27 +24,34 @@ namespace Beetles.Infrastructure.Migrations
 
             modelBuilder.Entity("Beetles.Domain.Entities.Wall", b =>
                 {
+                    b.Property<long>("TransactionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("transaction_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("TransactionId"));
+
+                    b.Property<DateTimeOffset?>("BusinessEnd")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("business_end")
+                        .HasDefaultValueSql("'infinity'::timestamptz");
+
+                    b.Property<DateTimeOffset>("BusinessStart")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("business_start");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("color");
+
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("BusinessStart")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("business_start");
-
-                    b.Property<DateTimeOffset>("BusinessEnd")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("business_end")
-                        .HasDefaultValueSql("'infinity'::timestamptz");
-
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("color");
 
                     b.Property<DateTimeOffset>("SystemEnd")
                         .ValueGeneratedOnAdd()
@@ -58,7 +65,7 @@ namespace Beetles.Infrastructure.Migrations
                         .HasColumnName("system_start")
                         .HasDefaultValueSql("now()");
 
-                    b.HasKey("Id", "BusinessStart", "BusinessEnd")
+                    b.HasKey("TransactionId")
                         .HasName("pk_walls");
 
                     b.ToTable("walls", (string)null);
