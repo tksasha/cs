@@ -10,7 +10,7 @@ internal sealed class WallRequestValidator : AbstractValidator<WallRequest>
     {
         RuleFor(r => r.Color).NotEmpty();
 
-        RuleFor(r => r.BusinessStart)
+        RuleFor(r => r.DateTime)
             .SetValidator(new DateTimeOffsetValidator());
     }
 }

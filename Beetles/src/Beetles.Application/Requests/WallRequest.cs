@@ -7,5 +7,5 @@ public sealed record class WallRequest : BitemporalRequest
     public required string Color { get; set; }
 
     public Wall ToEntity()
-        => new() { Color = Color, BusinessStart = BusinessStart };
+        => new() { Color = Color, BusinessStart = DateTime };
 }

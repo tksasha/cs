@@ -36,7 +36,7 @@ public sealed class WallRequestValidatorTest : BaseTest
         var request = new WallRequest
         {
             Color = "yellow",
-            BusinessStart = DateTimeOffset.Parse("2026-05-07")
+            DateTime = DateTimeOffset.Parse("2026-05-07")
         };
 
         var response = await _validator.ValidateAsync(request, CancellationToken.None);
@@ -55,7 +55,7 @@ public sealed class WallRequestValidatorTest : BaseTest
         var request = new WallRequest
         {
             Color = "red",
-            BusinessStart = DateTimeOffset.Parse("2026-05-07T12:34:56Z"),
+            DateTime = DateTimeOffset.Parse("2026-05-07T12:34:56Z"),
         };
 
         var response = await _validator.ValidateAsync(request, CancellationToken.None);
