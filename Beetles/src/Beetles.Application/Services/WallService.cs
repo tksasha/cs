@@ -13,10 +13,9 @@ internal sealed class WallService(IBitemporalRepository repository) : IWallServi
 {
     public async Task<WallResponse> CreateAsync(WallRequest request, CancellationToken cancellationToken)
     {
-        if (await repository.QueryAll<Wall>().AnyAsync(e => e.Color == request.Color, cancellationToken))
-        {
-            throw new ConflictException();
-        }
+        bool any = await repository.QueryAll<Wall>().AnyAsync(e => e.Color == request.Color, cancellationToken);
+
+        if (any) throw new ConflictException();
 
         var wall = request.ToEntity();
 
@@ -29,6 +28,13 @@ internal sealed class WallService(IBitemporalRepository repository) : IWallServi
 
     public async Task<WallResponse> UpdateAsync(int id, WallRequest request, CancellationToken cancellationToken)
     {
+        bool any = await repository.QueryAll<Wall>().AnyAsync(e =>
+            e.Id == id
+            && e.Color == request.Color
+            && e.BusinessStart == request.DateTime, cancellationToken);
+
+        if (any) throw new ConflictException();
+
         var wall = request.ToEntity();
         wall.Id = id;
 

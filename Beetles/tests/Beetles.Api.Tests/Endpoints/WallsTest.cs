@@ -64,15 +64,41 @@ public sealed class WallsTest(DatabaseFixture fixture) : IAsyncLifetime
     [Fact]
     public async Task ShouldNotCreateDuplicate()
     {
-        await CreateRedWallAsync(CancellationToken.None);
-
         using var client = _factory.CreateClient();
 
         var payload = new { Color = "red", DateTime = "2025-05-01T00:00:00Z" };
 
         var response = await client.PostAsJsonAsync("/walls", payload, CancellationToken.None);
 
+        Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
+
+        response = await client.PostAsJsonAsync("/walls", payload, CancellationToken.None);
+
         Assert.Equal(System.Net.HttpStatusCode.Conflict, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task ShouldNotUpdateDuplicate()
+    {
+        _timeProviderMock
+            .Setup(p => p.GetUtcNow())
+            .Returns(Date("10 May 2025"));
+
+        int id = await CreateRedWallAsync(CancellationToken.None);
+
+        using var client = _factory.CreateClient();
+
+        var payload = new { Color = "blue", DateTime = "2025-05-02T00:00:00Z" };
+
+        var response = await client.PatchAsJsonAsync($"/walls/{id}", payload, CancellationToken.None);
+
+        Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+
+        response = await client.PatchAsJsonAsync($"/walls/{id}", payload, CancellationToken.None);
+
+        Assert.Equal(System.Net.HttpStatusCode.Conflict, response.StatusCode);
+
+        _timeProviderMock.Verify(p => p.GetUtcNow());
     }
 
     private static DateTimeOffset Date(string date)
