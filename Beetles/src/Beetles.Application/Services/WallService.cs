@@ -1,15 +1,23 @@
 using Beetles.Application.Common.Interfaces;
 using Beetles.Application.Common.Mappings;
+using Beetles.Application.Exceptions;
 using Beetles.Application.Requests;
 using Beetles.Application.Responses;
 using Beetles.Domain.Entities;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Beetles.Application.Services;
 
-public sealed class WallService(IBitemporalRepository repository) : IWallService
+internal sealed class WallService(IBitemporalRepository repository) : IWallService
 {
     public async Task<WallResponse> CreateAsync(WallRequest request, CancellationToken cancellationToken)
     {
+        if (await repository.QueryAll<Wall>().AnyAsync(e => e.Color == request.Color, cancellationToken))
+        {
+            throw new ConflictException();
+        }
+
         var wall = request.ToEntity();
 
         await repository.InsertAsync(wall, cancellationToken);

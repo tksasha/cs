@@ -61,6 +61,20 @@ public sealed class WallsTest(DatabaseFixture fixture) : IAsyncLifetime
         );
     }
 
+    [Fact]
+    public async Task ShouldNotCreateDuplicate()
+    {
+        await CreateRedWallAsync(CancellationToken.None);
+
+        using var client = _factory.CreateClient();
+
+        var payload = new { Color = "red", DateTime = "2025-05-01T00:00:00Z" };
+
+        var response = await client.PostAsJsonAsync("/walls", payload, CancellationToken.None);
+
+        Assert.Equal(System.Net.HttpStatusCode.Conflict, response.StatusCode);
+    }
+
     private static DateTimeOffset Date(string date)
         => DateTimeOffset.ParseExact(
             $"{date}, 00:00Z",
