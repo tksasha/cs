@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Beetles.Application.Tests.Validators;
 
-public sealed class WallRequestValidatorTest : BaseTest
+public sealed class WallRequestValidatorTest : AbstractTest
 {
     private readonly IValidator<WallRequest> _validator;
 
@@ -31,7 +31,7 @@ public sealed class WallRequestValidatorTest : BaseTest
     }
 
     [Fact]
-    public async Task BusinessStart_ShouldBeUtc()
+    public async Task DateTime_ShouldBeUtc()
     {
         var request = new WallRequest
         {
@@ -45,7 +45,22 @@ public sealed class WallRequestValidatorTest : BaseTest
 
         Assert.Multiple(
             () => Assert.False(response.IsValid),
-            () => Assert.Contains("Must be UTC.", errors)
+            () => Assert.Contains("'DateTime' must be UTC.", errors)
+        );
+    }
+
+    [Fact]
+    public async Task DateTime_ShouldNotBeEmpty()
+    {
+        var request = new WallRequest { Color = "pink" };
+
+        var response = await _validator.ValidateAsync(request, CancellationToken.None);
+
+        var errors = response.Errors.Select(e => e.ErrorMessage);
+
+        Assert.Multiple(
+            () => Assert.False(response.IsValid),
+            () => Assert.Contains("'DateTime' must not be empty.", errors)
         );
     }
 

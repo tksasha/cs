@@ -2,11 +2,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Beetles.Application.Tests;
 
-public abstract class BaseTest
+public abstract class AbstractTest
 {
     protected readonly ServiceProvider _serviceProvider;
 
-    public BaseTest()
+    public AbstractTest()
     {
         var services = new ServiceCollection();
 

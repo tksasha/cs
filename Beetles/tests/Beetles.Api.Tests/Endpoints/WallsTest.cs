@@ -1,5 +1,3 @@
-using System.Globalization;
-
 using Beetles.Api.Tests.Fixtures;
 using Beetles.Application.Common.Interfaces;
 using Beetles.Application.Responses;
@@ -14,7 +12,7 @@ using Moq;
 namespace Beetles.Api.Tests.Endpoints;
 
 [Collection("Database Collection")]
-public sealed class WallsTest(DatabaseFixture fixture) : IAsyncLifetime
+public sealed class WallsTest(DatabaseFixture fixture) : AbstractEndpointTest, IAsyncLifetime
 {
     private readonly WebApplicationFactory<Program> _factory = fixture.Factory;
 
@@ -101,12 +99,41 @@ public sealed class WallsTest(DatabaseFixture fixture) : IAsyncLifetime
         _timeProviderMock.Verify(p => p.GetUtcNow());
     }
 
-    private static DateTimeOffset Date(string date)
-        => DateTimeOffset.ParseExact(
-            $"{date}, 00:00Z",
-            "d MMM yyyy, HH:mm'Z'",
-            CultureInfo.InvariantCulture,
-            DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+    [Fact]
+    public async Task ShouldNotCreateWithEmptyColor()
+    {
+        using var client = _factory.CreateClient();
+
+        var payload = new { Color = "", DateTime = "2025-05-01T00:00:00Z" };
+
+        var response = await client.PostAsJsonAsync("/walls", payload, CancellationToken.None);
+
+        Assert.Equal(System.Net.HttpStatusCode.UnprocessableEntity, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task ShouldNotCreateWithEmptyDateTime()
+    {
+        using var client = _factory.CreateClient();
+
+        var payload = new { Color = "brown", DateTime = "" };
+
+        var response = await client.PostAsJsonAsync("/walls", payload, CancellationToken.None);
+
+        Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task ShouldNotCreateNonUtcDatetime()
+    {
+        using var client = _factory.CreateClient();
+
+        var payload = new { Color = "black", DateTime = "2025-05-03" };
+
+        var response = await client.PostAsJsonAsync("/walls", payload, CancellationToken.None);
+
+        Assert.Equal(System.Net.HttpStatusCode.UnprocessableEntity, response.StatusCode);
+    }
 
     private async Task<int> CreateRedWallAsync(CancellationToken cancellationToken)
     {
