@@ -34,15 +34,17 @@ internal sealed class BitemporalRepository(
             && e.SystemEnd == DateTimeOffset.MaxValue, cancellationToken)
         ?? throw new NotFoundException();
 
-
-    public async Task<T> GetAsync<T>(int id, DateTimeOffset date, CancellationToken cancellationToken)
+    private async Task<T?> FindAsync<T>(int id, DateTimeOffset dateTime, CancellationToken cancellationToken)
         where T : BitemporalEntity
         => await context.Set<T>().FirstOrDefaultAsync(e =>
             e.Id == id
-            && e.BusinessStart <= date
-            && e.BusinessEnd > date
-            && e.SystemEnd == DateTimeOffset.MaxValue, cancellationToken)
-        ?? throw new NotFoundException();
+            && e.BusinessStart <= dateTime
+            && e.BusinessEnd > dateTime
+            && e.SystemEnd == DateTimeOffset.MaxValue, cancellationToken);
+
+    public async Task<T> GetAsync<T>(int id, DateTimeOffset dateTime, CancellationToken cancellationToken)
+        where T : BitemporalEntity
+        => await FindAsync<T>(id, dateTime, cancellationToken) ?? throw new NotFoundException();
 
     private void Supersede<T>(T entity)
         where T : BitemporalEntity
@@ -65,9 +67,6 @@ internal sealed class BitemporalRepository(
         await InsertAsync(entity, cancellationToken);
     }
 
-    private Task AppendAsync<T>(T entity, CancellationToken cancellationToken) where T : BitemporalEntity
-        => AppendAsync(entity, DateTimeOffset.MaxValue, cancellationToken);
-
     private async Task AppendAsync<T>(T entity, DateTimeOffset businessEnd, CancellationToken cancellationToken)
         where T : BitemporalEntity
     {
@@ -80,10 +79,34 @@ internal sealed class BitemporalRepository(
         await InsertAsync(clone, cancellationToken);
     }
 
+    private async Task AppendAsync<T>(T entity, CancellationToken cancellationToken)
+        where T : BitemporalEntity
+    {
+        var current = await context.Set<T>()
+            .OrderBy(e => e.BusinessStart)
+            .FirstOrDefaultAsync(e =>
+                e.Id == entity.Id
+                && e.BusinessStart > entity.BusinessStart
+                && e.SystemEnd == DateTimeOffset.MaxValue, cancellationToken);
+
+        var businessEnd = current is not null
+            ? current.BusinessStart
+            : DateTimeOffset.MaxValue;
+
+        await AppendAsync(entity, businessEnd, cancellationToken);
+    }
+
     public async Task UpdateAsync<T>(T entity, CancellationToken cancellationToken)
         where T : BitemporalEntity
     {
-        var actual = await GetAsync<T>(entity.Id, entity.BusinessStart, cancellationToken);
+        var actual = await FindAsync<T>(entity.Id, entity.BusinessStart, cancellationToken);
+
+        if (actual is null)
+        {
+            await AppendAsync(entity, cancellationToken);
+
+            return;
+        }
 
         Supersede(actual);
 
@@ -104,7 +127,7 @@ internal sealed class BitemporalRepository(
 
         var actual = await GetAsync<T>(id, date.AddDays(-1), cancellationToken);
 
-        await AppendAsync(actual, cancellationToken);
+        await AppendAsync(actual, DateTimeOffset.MaxValue, cancellationToken);
     }
 
     public Task CommitChangesAsync(CancellationToken cancellationToken)

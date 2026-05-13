@@ -151,6 +151,21 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : IAsyncLifetime
         );
     }
 
+    [Fact]
+    public async Task ShouldUpdateRedisAsync()
+    {
+        await CreateRedWallAsync(CancellationToken.None);
+        await UpdateRedisWallAsync(CancellationToken.None);
+
+        var walls = await _repository.QueryAll<Wall>().ToListAsync(CancellationToken.None);
+
+        Assert.Multiple(
+            () => Assert.Equal(2, walls.Count),
+            () => Assert.Contains(walls, RedWall),
+            () => Assert.Contains(walls, ClosedRedisWall)
+        );
+    }
+
     private static DateTimeOffset Date(string date)
         => DateTimeOffset.ParseExact(
             $"{date}, 00:00Z",
@@ -240,6 +255,21 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : IAsyncLifetime
             .Returns(Date("25 Jun 2025"));
 
         await _repository.DeleteAsync<Wall>(1, Date("13 Jun 2025"), cancellationToken);
+
+        await _repository.CommitChangesAsync(cancellationToken);
+
+        _timeProviderMock.Verify(p => p.GetUtcNow());
+    }
+
+    private async Task UpdateRedisWallAsync(CancellationToken cancellationToken)
+    {
+        _timeProviderMock
+            .Setup(p => p.GetUtcNow())
+            .Returns(Date("10 May 2025"));
+
+        var wall = new Wall { Id = 1, Color = "redis", BusinessStart = Date("1 Apr 2025") };
+
+        await _repository.UpdateAsync(wall, cancellationToken);
 
         await _repository.CommitChangesAsync(cancellationToken);
 
@@ -364,5 +394,13 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : IAsyncLifetime
         && wall.BusinessStart == Date("1 Jun 2025")
         && wall.BusinessEnd == Infinity
         && wall.SystemStart == Date("25 Jun 2025")
+        && wall.SystemEnd == Infinity;
+
+    private static bool ClosedRedisWall(Wall wall)
+        => wall.Id == 1
+        && wall.Color == "redis"
+        && wall.BusinessStart == Date("1 Apr 2025")
+        && wall.BusinessEnd == Date("1 May 2025")
+        && wall.SystemStart == Date("10 May 2025")
         && wall.SystemEnd == Infinity;
 }

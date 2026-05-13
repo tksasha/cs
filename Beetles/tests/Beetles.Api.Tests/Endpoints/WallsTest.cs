@@ -2,6 +2,7 @@ using System.Globalization;
 
 using Beetles.Api.Tests.Fixtures;
 using Beetles.Application.Common.Interfaces;
+using Beetles.Application.Responses;
 using Beetles.Domain.Entities;
 using Beetles.Infrastructure;
 
@@ -32,27 +33,32 @@ public sealed class WallsTest(DatabaseFixture fixture) : IAsyncLifetime
     { }
 
     [Fact]
-    public async Task ShouldCreateRedWall()
+    public async Task ShouldCreateRedWallAsync()
     {
-        _timeProviderMock
-            .Setup(p => p.GetUtcNow())
-            .Returns(Date("12 May 2026"));
-
-        using var client = _factory.CreateClient();
-
-        var payload = new { Color = "red", DateTime = "2026-05-01T00:00:00Z" };
-
-        var response = await client.PostAsJsonAsync("/walls", payload);
+        int id = await CreateRedWallAsync(CancellationToken.None);
 
         var walls = await _repository.QueryAll<Wall>().ToListAsync(CancellationToken.None);
 
         Assert.Multiple(
-            () => Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode),
             () => Assert.Single(walls),
-            () => Assert.Contains(walls, RedWall)
+            () => Assert.Contains(walls, RedWall(id))
         );
+    }
 
-        _timeProviderMock.Verify(p => p.GetUtcNow());
+    [Fact]
+    public async Task ShouldUpdateRedisWallAsync()
+    {
+        int id = await CreateRedWallAsync(CancellationToken.None);
+
+        await UpdateRedisWallAsync(id, CancellationToken.None);
+
+        var walls = await _repository.QueryAll<Wall>().ToListAsync(CancellationToken.None);
+
+        Assert.Multiple(
+            () => Assert.Equal(2, walls.Count),
+            () => Assert.Contains(walls, RedWall(id)),
+            () => Assert.Contains(walls, ClosedRedisWall(id))
+        );
     }
 
     private static DateTimeOffset Date(string date)
@@ -62,11 +68,69 @@ public sealed class WallsTest(DatabaseFixture fixture) : IAsyncLifetime
             CultureInfo.InvariantCulture,
             DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
 
-    private static bool RedWall(Wall wall)
-        => wall.Id == 1
-        && wall.Color == "red"
-        && wall.BusinessStart == Date("1 May 2026")
-        && wall.BusinessEnd == Infinity
-        && wall.SystemStart == Date("12 May 2026")
-        && wall.SystemEnd == Infinity;
+    private async Task<int> CreateRedWallAsync(CancellationToken cancellationToken)
+    {
+        _timeProviderMock
+            .Setup(p => p.GetUtcNow())
+            .Returns(Date("10 May 2025"));
+
+        using var client = _factory.CreateClient();
+
+        var payload = new { Color = "red", DateTime = "2025-05-01T00:00:00Z" };
+
+        var response = await client.PostAsJsonAsync("/walls", payload, cancellationToken);
+
+        var wallResponse = response.Content.ReadFromJsonAsync<WallResponse>(cancellationToken);
+
+        Assert.Multiple(
+            () => Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode),
+            () => Assert.NotNull(wallResponse)
+        );
+
+        _timeProviderMock.Verify(p => p.GetUtcNow());
+
+        return wallResponse.Id;
+    }
+
+    private async Task UpdateRedisWallAsync(int id, CancellationToken cancellationToken)
+    {
+        _timeProviderMock
+            .Setup(p => p.GetUtcNow())
+            .Returns(Date("11 May 2025"));
+
+        using var client = _factory.CreateClient();
+
+        var payload = new { Color = "redis", DateTime = "2025-04-01T00:00:00Z" };
+
+        var response = await client.PatchAsJsonAsync($"/walls/{id}", payload, cancellationToken);
+
+        var wallResponse = await response.Content.ReadFromJsonAsync<WallResponse>(cancellationToken);
+
+        Assert.Multiple(
+            () => Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode),
+            () => Assert.NotNull(wallResponse)
+        );
+
+        _timeProviderMock.Verify(p => p.GetUtcNow());
+    }
+
+    private static Predicate<Wall> RedWall(int id)
+    {
+        return wall => wall.Id == id
+            && wall.Color == "red"
+            && wall.BusinessStart == Date("1 May 2025")
+            && wall.BusinessEnd == Infinity
+            && wall.SystemStart == Date("10 May 2025")
+            && wall.SystemEnd == Infinity;
+    }
+
+    private static Predicate<Wall> ClosedRedisWall(int id)
+    {
+        return wall => wall.Id == id
+            && wall.Color == "redis"
+            && wall.BusinessStart == Date("1 Apr 2025")
+            && wall.BusinessEnd == Date("1 May 2025")
+            && wall.SystemStart == Date("11 May 2025")
+            && wall.SystemEnd == Infinity;
+    }
 }
