@@ -18,8 +18,6 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : AbstractReposi
 
     private readonly IBitemporalRepository _repository = fixture.BitemporalRepository;
 
-    private static readonly DateTimeOffset Infinity = DateTimeOffset.MaxValue;
-
     public async Task InitializeAsync()
     {
         await _databaseContext.Database.ExecuteSqlRawAsync("TRUNCATE walls", CancellationToken.None);
@@ -166,12 +164,29 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : AbstractReposi
     }
 
     [Fact]
-    public async Task ShouldThrowNotFoundException()
+    public async Task Update_ShouldThrowNotFoundException()
     {
         var wall = new Wall { Id = 123, Color = "white" };
 
         await Assert.ThrowsAnyAsync<NotFoundException>(async () =>
             await _repository.UpdateAsync(wall, CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task Delete_ShouldThrowNotFoundException()
+    {
+        int id = await CreateBrownWallAsync(CancellationToken.None);
+
+        var dateTime = await UpdateBrownWallAsync(CancellationToken.None);
+
+        var ws = await _repository.QueryAll<Wall>().ToListAsync(CancellationToken.None);
+
+        await _repository.DeleteAsync<Wall>(id, dateTime, CancellationToken.None);
+
+        await _repository.CommitChangesAsync(CancellationToken.None);
+
+        await Assert.ThrowsAsync<NotFoundException>(async () =>
+            await _repository.DeleteAsync<Wall>(id, dateTime, CancellationToken.None));
     }
 
     private async Task CreateRedWallAsync(CancellationToken cancellationToken)
@@ -275,6 +290,50 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : AbstractReposi
         await _repository.CommitChangesAsync(cancellationToken);
 
         _timeProviderMock.Verify(p => p.GetUtcNow());
+    }
+
+    private async Task<int> CreateBrownWallAsync(CancellationToken cancellationToken)
+    {
+        _timeProviderMock
+            .Setup(p => p.GetUtcNow())
+            .Returns(Date("13 May 2025"));
+
+        var wall = new Wall
+        {
+            Id = 52,
+            Color = "brown",
+            BusinessStart = Date("1 May 2025"),
+        };
+
+        await _repository.InsertAsync(wall, cancellationToken);
+
+        await _repository.CommitChangesAsync(cancellationToken);
+
+        _timeProviderMock.Verify(p => p.GetUtcNow());
+
+        return wall.Id;
+    }
+
+    private async Task<DateTimeOffset> UpdateBrownWallAsync(CancellationToken cancellationToken)
+    {
+        _timeProviderMock
+            .Setup(p => p.GetUtcNow())
+            .Returns(Date("14 May 2025"));
+
+        var wall = new Wall
+        {
+            Id = 52,
+            Color = "brown",
+            BusinessStart = Date("3 May 2025"),
+        };
+
+        await _repository.UpdateAsync(wall, cancellationToken);
+
+        await _repository.CommitChangesAsync(cancellationToken);
+
+        _timeProviderMock.Verify(p => p.GetUtcNow());
+
+        return wall.BusinessStart;
     }
 
     private static bool RedWall(Wall wall)

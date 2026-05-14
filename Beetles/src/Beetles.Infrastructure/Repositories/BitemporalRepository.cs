@@ -125,9 +125,22 @@ internal sealed class BitemporalRepository(
         await AppendAsync(entity, actual.BusinessEnd ?? DateTimeOffset.MaxValue, cancellationToken);
     }
 
+    private async Task EnsureExists<T>(int id, DateTimeOffset dateTime, CancellationToken cancellationToken)
+        where T : BitemporalEntity
+    {
+        bool any = await context.Set<T>().AnyAsync(e =>
+            e.Id == id
+            && e.BusinessStart == dateTime
+            && e.SystemEnd == DateTimeOffset.MaxValue, cancellationToken);
+
+        if (!any) throw new NotFoundException();
+    }
+
     public async Task DeleteAsync<T>(int id, DateTimeOffset dateTime, CancellationToken cancellationToken)
         where T : BitemporalEntity
     {
+        await EnsureExists<T>(id, dateTime, cancellationToken);
+
         await context.Set<T>().Where(e =>
             e.Id == id
             && e.BusinessStart <= dateTime
