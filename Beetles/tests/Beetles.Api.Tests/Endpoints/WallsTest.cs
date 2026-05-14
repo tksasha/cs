@@ -124,13 +124,41 @@ public sealed class WallsTest(DatabaseFixture fixture) : AbstractEndpointTest, I
     }
 
     [Fact]
-    public async Task ShouldNotCreateNonUtcDatetime()
+    public async Task ShouldNotCreateWithDatetimeWithoutUtcTz()
     {
         using var client = _factory.CreateClient();
 
         var payload = new { Color = "black", DateTime = "2025-05-03" };
 
         var response = await client.PostAsJsonAsync("/walls", payload, CancellationToken.None);
+
+        Assert.Equal(System.Net.HttpStatusCode.UnprocessableEntity, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task ShouldNotUpdateWithEmptyDateTime()
+    {
+        int id = await CreateRedWallAsync(CancellationToken.None);
+
+        using var client = _factory.CreateClient();
+
+        var payload = new { Color = "magenta", DateTime = "" };
+
+        var response = await client.PatchAsJsonAsync($"/walls/{id}", payload, CancellationToken.None);
+
+        Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task ShouldNotUpdateWithDateTimeWithoutUtcTz()
+    {
+        int id = await CreateRedWallAsync(CancellationToken.None);
+
+        using var client = _factory.CreateClient();
+
+        var payload = new { Color = "white", DateTime = "2026-05-01" };
+
+        var response = await client.PatchAsJsonAsync($"/walls/{id}", payload, CancellationToken.None);
 
         Assert.Equal(System.Net.HttpStatusCode.UnprocessableEntity, response.StatusCode);
     }
