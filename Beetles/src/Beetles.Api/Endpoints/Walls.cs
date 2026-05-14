@@ -46,14 +46,14 @@ internal static class IEntpointRouteBuilderExtensions
 
             walls.MapDelete("/{id}", async Task<NoContent> (
                 int id,
-                [FromQuery] DateTimeOffset date,
+                [FromQuery] DateTimeOffset dateTime,
                 IValidator<DateTimeOffset> validator,
                 IWallService service,
                 CancellationToken cancellationToken) =>
             {
-                await validator.ValidateAndThrowAsync(date, cancellationToken);
+                await validator.ValidateAndThrowAsync(dateTime, cancellationToken);
 
-                await service.DeleteAsync(id, date, cancellationToken);
+                await service.DeleteAsync(id, dateTime, cancellationToken);
 
                 return TypedResults.NoContent();
             });

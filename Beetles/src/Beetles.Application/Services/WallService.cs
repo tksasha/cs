@@ -45,9 +45,9 @@ internal sealed class WallService(IBitemporalRepository repository) : IWallServi
         return wall.ToResponse();
     }
 
-    public async Task DeleteAsync(int id, DateTimeOffset date, CancellationToken cancellationToken)
+    public async Task DeleteAsync(int id, DateTimeOffset dateTime, CancellationToken cancellationToken)
     {
-        await repository.DeleteAsync<Wall>(id, date, cancellationToken);
+        await repository.DeleteAsync<Wall>(id, dateTime, cancellationToken);
 
         await repository.CommitChangesAsync(cancellationToken);
     }

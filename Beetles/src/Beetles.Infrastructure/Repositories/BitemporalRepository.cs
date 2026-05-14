@@ -125,17 +125,17 @@ internal sealed class BitemporalRepository(
         await AppendAsync(entity, actual.BusinessEnd ?? DateTimeOffset.MaxValue, cancellationToken);
     }
 
-    public async Task DeleteAsync<T>(int id, DateTimeOffset date, CancellationToken cancellationToken)
+    public async Task DeleteAsync<T>(int id, DateTimeOffset dateTime, CancellationToken cancellationToken)
         where T : BitemporalEntity
     {
         await context.Set<T>().Where(e =>
             e.Id == id
-            && e.BusinessStart <= date
-            && e.BusinessEnd >= date
+            && e.BusinessStart <= dateTime
+            && e.BusinessEnd >= dateTime
             && e.SystemEnd == DateTimeOffset.MaxValue
         ).ForEachAsync(Supersede, cancellationToken);
 
-        var actual = await GetAsync<T>(id, date.AddDays(-1), cancellationToken);
+        var actual = await GetAsync<T>(id, dateTime.AddDays(-1), cancellationToken);
 
         await AppendAsync(actual, DateTimeOffset.MaxValue, cancellationToken);
     }

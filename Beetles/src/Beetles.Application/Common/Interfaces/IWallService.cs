@@ -9,5 +9,5 @@ public interface IWallService
 
     Task<WallResponse> UpdateAsync(int id, WallRequest request, CancellationToken cancellationToken);
 
-    Task DeleteAsync(int id, DateTimeOffset date, CancellationToken cancellationToken);
+    Task DeleteAsync(int id, DateTimeOffset dateTime, CancellationToken cancellationToken);
 }
