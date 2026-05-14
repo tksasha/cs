@@ -175,7 +175,7 @@ public sealed class WallsTest(DatabaseFixture fixture) : AbstractEndpointTest, I
 
         var response = await client.PostAsJsonAsync("/walls", payload, cancellationToken);
 
-        var wallResponse = response.Content.ReadFromJsonAsync<WallResponse>(cancellationToken);
+        var wallResponse = await response.Content.ReadFromJsonAsync<WallResponse>(cancellationToken);
 
         Assert.Multiple(
             () => Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode),
@@ -184,7 +184,7 @@ public sealed class WallsTest(DatabaseFixture fixture) : AbstractEndpointTest, I
 
         _timeProviderMock.Verify(p => p.GetUtcNow());
 
-        return wallResponse.Id;
+        return wallResponse!.Id;
     }
 
     private async Task UpdateRedisWallAsync(int id, CancellationToken cancellationToken)

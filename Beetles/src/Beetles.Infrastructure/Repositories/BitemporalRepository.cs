@@ -96,9 +96,19 @@ internal sealed class BitemporalRepository(
         await AppendAsync(entity, businessEnd, cancellationToken);
     }
 
+    private async Task EnsureExistsAsync<T>(int id, CancellationToken cancellationToken)
+        where T : BitemporalEntity
+    {
+        bool any = await context.Set<T>().AnyAsync(e => e.Id == id, cancellationToken);
+
+        if (!any) throw new NotFoundException();
+    }
+
     public async Task UpdateAsync<T>(T entity, CancellationToken cancellationToken)
         where T : BitemporalEntity
     {
+        await EnsureExistsAsync<T>(entity.Id, cancellationToken);
+
         var actual = await FindAsync<T>(entity.Id, entity.BusinessStart, cancellationToken);
 
         if (actual is null)

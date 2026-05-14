@@ -1,6 +1,5 @@
-using System.Globalization;
-
 using Beetles.Application.Common.Interfaces;
+using Beetles.Application.Exceptions;
 using Beetles.Domain.Entities;
 using Beetles.Infrastructure.Tests.Fixtures;
 
@@ -11,7 +10,7 @@ using Moq;
 namespace Beetles.Infrastructure.Tests.Repositories;
 
 [Collection("Database Collection")]
-public sealed class WallRepositoryTest(DatabaseFixture fixture) : IAsyncLifetime
+public sealed class WallRepositoryTest(DatabaseFixture fixture) : AbstractRepositoryTest, IAsyncLifetime
 {
     private readonly DatabaseContext _databaseContext = fixture.DatabaseContext;
 
@@ -166,12 +165,14 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : IAsyncLifetime
         );
     }
 
-    private static DateTimeOffset Date(string date)
-        => DateTimeOffset.ParseExact(
-            $"{date}, 00:00Z",
-            "d MMM yyyy, HH:mm'Z'",
-            CultureInfo.InvariantCulture,
-            DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+    [Fact]
+    public async Task ShouldThrowNotFoundException()
+    {
+        var wall = new Wall { Id = 123, Color = "white" };
+
+        await Assert.ThrowsAnyAsync<NotFoundException>(async () =>
+            await _repository.UpdateAsync(wall, CancellationToken.None));
+    }
 
     private async Task CreateRedWallAsync(CancellationToken cancellationToken)
     {
