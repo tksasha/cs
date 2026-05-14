@@ -141,16 +141,23 @@ internal sealed class BitemporalRepository(
     {
         await EnsureExists<T>(id, dateTime, cancellationToken);
 
+        var actual = await context.Set<T>().FirstOrDefaultAsync(e =>
+            e.Id == id
+            && e.BusinessStart < dateTime
+            && e.BusinessEnd >= dateTime
+            && e.SystemEnd == DateTimeOffset.MaxValue, cancellationToken);
+
+        if (actual is not null)
+        {
+            await AppendAsync(actual, DateTimeOffset.MaxValue, cancellationToken);
+        }
+
         await context.Set<T>().Where(e =>
             e.Id == id
             && e.BusinessStart <= dateTime
             && e.BusinessEnd >= dateTime
             && e.SystemEnd == DateTimeOffset.MaxValue
         ).ForEachAsync(Supersede, cancellationToken);
-
-        var actual = await GetAsync<T>(id, dateTime.AddDays(-1), cancellationToken);
-
-        await AppendAsync(actual, DateTimeOffset.MaxValue, cancellationToken);
     }
 
     public Task CommitChangesAsync(CancellationToken cancellationToken)

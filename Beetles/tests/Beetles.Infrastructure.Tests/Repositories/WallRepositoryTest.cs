@@ -189,6 +189,29 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : AbstractReposi
             await _repository.DeleteAsync<Wall>(id, dateTime, CancellationToken.None));
     }
 
+    [Fact]
+    public async Task ShouldDeleteIntradayRecord()
+    {
+        _timeProviderMock
+            .Setup(p => p.GetUtcNow())
+            .Returns(Date("1 Jun 2026"));
+
+        var wall = new Wall { Color = "red", BusinessStart = DateTimeOffset.Parse("2025-05-01T10:00:00Z") };
+
+        await _databaseContext.Set<Wall>().AddAsync(wall, CancellationToken.None);
+        await _repository.CommitChangesAsync(CancellationToken.None);
+
+        wall.Color = "blue";
+        wall.BusinessStart = DateTimeOffset.Parse("2025-05-01T14:00:00Z");
+
+        await _repository.UpdateAsync(wall, CancellationToken.None);
+        await _repository.CommitChangesAsync(CancellationToken.None);
+
+        await _repository.DeleteAsync<Wall>(wall.Id, wall.BusinessStart, CancellationToken.None);
+
+        _timeProviderMock.Verify(p => p.GetUtcNow());
+    }
+
     private async Task CreateRedWallAsync(CancellationToken cancellationToken)
     {
         _timeProviderMock
