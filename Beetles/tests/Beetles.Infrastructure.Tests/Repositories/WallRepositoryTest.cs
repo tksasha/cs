@@ -274,6 +274,19 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : AbstractReposi
         await _repository.DeleteAsync<Wall>(wall.Id, wall.BusinessStart, CancellationToken.None);
     }
 
+    [Fact]
+    public async Task Delete_ShouldThrowExceptionWhenDateDoesNotExist()
+    {
+        var cancellationToken = CancellationToken.None;
+
+        var wall = await CreateWallAsync(id: 13, color: "red", businessStart: "1 May 2025", now: "1 Jun 2026", cancellationToken);
+
+        await UpdateWallAsync(id: wall.Id, color: "blue", businessStart: "10 May 2025", now: "2 Jun 2026", cancellationToken);
+
+        await Assert.ThrowsAsync<NotFoundException>(async () =>
+            await _repository.DeleteAsync<Wall>(wall.Id, DateTimeOffset.Parse("2025-05-09T23:59:59.9999999Z"), cancellationToken));
+    }
+
     private async Task CreateRedWallAsync(CancellationToken cancellationToken)
     {
         _timeProviderMock
