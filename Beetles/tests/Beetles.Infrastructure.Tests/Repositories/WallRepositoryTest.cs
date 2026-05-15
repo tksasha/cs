@@ -238,18 +238,18 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : AbstractReposi
     [Fact]
     public async Task Delete_ShouldThrowNotFoundException()
     {
-        int id = await CreateBrownWallAsync(CancellationToken.None);
+        var cancellationToken = CancellationToken.None;
 
-        var dateTime = await UpdateBrownWallAsync(CancellationToken.None);
+        var wall = await CreateWallAsync(
+            id: 22, color: "brown", businessStart: "1 May 2025", now: "13 May 2025", cancellationToken);
 
-        var ws = await _repository.QueryAll<Wall>().ToListAsync(CancellationToken.None);
+        wall = await UpdateWallAsync(
+            id: wall.Id, color: "brown", businessStart: "3 May 2025", now: "14 May 2025", cancellationToken);
 
-        await _repository.DeleteAsync<Wall>(id, dateTime, CancellationToken.None);
-
-        await _repository.CommitChangesAsync(CancellationToken.None);
+        await DeleteWallAsync(id: wall.Id, businessStart: wall.BusinessStart, now: "15 May 2026", cancellationToken);
 
         await Assert.ThrowsAsync<NotFoundException>(async () =>
-            await _repository.DeleteAsync<Wall>(id, dateTime, CancellationToken.None));
+            await _repository.DeleteAsync<Wall>(wall.Id, wall.BusinessStart, cancellationToken));
     }
 
     [Fact]
@@ -350,13 +350,16 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : AbstractReposi
         _timeProviderMock.Verify(p => p.GetUtcNow());
     }
 
-    private async Task DeleteWallAsync(int id, string businessStart, string now, CancellationToken cancellationToken)
+    private Task DeleteWallAsync(int id, string businessStart, string now, CancellationToken cancellationToken)
+        => DeleteWallAsync(id, Date(businessStart), now, cancellationToken);
+
+    private async Task DeleteWallAsync(int id, DateTimeOffset businessStart, string now, CancellationToken cancellationToken)
     {
         _timeProviderMock
             .Setup(p => p.GetUtcNow())
             .Returns(Date(now));
 
-        await _repository.DeleteAsync<Wall>(id, Date(businessStart), cancellationToken);
+        await _repository.DeleteAsync<Wall>(id, businessStart, cancellationToken);
 
         await _repository.CommitChangesAsync(cancellationToken);
 
@@ -378,51 +381,7 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : AbstractReposi
         _timeProviderMock.Verify(p => p.GetUtcNow());
     }
 
-    private async Task<int> CreateBrownWallAsync(CancellationToken cancellationToken)
-    {
-        _timeProviderMock
-            .Setup(p => p.GetUtcNow())
-            .Returns(Date("13 May 2025"));
-
-        var wall = new Wall
-        {
-            Id = 52,
-            Color = "brown",
-            BusinessStart = Date("1 May 2025"),
-        };
-
-        await _repository.InsertAsync(wall, cancellationToken);
-
-        await _repository.CommitChangesAsync(cancellationToken);
-
-        _timeProviderMock.Verify(p => p.GetUtcNow());
-
-        return wall.Id;
-    }
-
-    private async Task<DateTimeOffset> UpdateBrownWallAsync(CancellationToken cancellationToken)
-    {
-        _timeProviderMock
-            .Setup(p => p.GetUtcNow())
-            .Returns(Date("14 May 2025"));
-
-        var wall = new Wall
-        {
-            Id = 52,
-            Color = "brown",
-            BusinessStart = Date("3 May 2025"),
-        };
-
-        await _repository.UpdateAsync(wall, cancellationToken);
-
-        await _repository.CommitChangesAsync(cancellationToken);
-
-        _timeProviderMock.Verify(p => p.GetUtcNow());
-
-        return wall.BusinessStart;
-    }
-
-    private async Task CreateWallAsync(int id, string color, string businessStart, string now, CancellationToken cancellationToken)
+    private async Task<Wall> CreateWallAsync(int id, string color, string businessStart, string now, CancellationToken cancellationToken)
     {
         _timeProviderMock
             .Setup(p => p.GetUtcNow())
@@ -434,9 +393,11 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : AbstractReposi
         await _repository.CommitChangesAsync(cancellationToken);
 
         _timeProviderMock.Verify(p => p.GetUtcNow());
+
+        return wall;
     }
 
-    private async Task UpdateWallAsync(int id, string color, string businessStart, string now, CancellationToken cancellationToken)
+    private async Task<Wall> UpdateWallAsync(int id, string color, string businessStart, string now, CancellationToken cancellationToken)
     {
         _timeProviderMock
             .Setup(p => p.GetUtcNow())
@@ -448,6 +409,8 @@ public sealed class WallRepositoryTest(DatabaseFixture fixture) : AbstractReposi
         await _repository.CommitChangesAsync(cancellationToken);
 
         _timeProviderMock.Verify(p => p.GetUtcNow());
+
+        return wall;
     }
 
     private static bool RedWall(Wall wall)
