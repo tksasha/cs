@@ -16,3 +16,7 @@
 ```sh
 $ dotnet nuget locals all --clear
 ```
+
+# TODO
+- indexers
+- events
