@@ -1,11 +1,11 @@
 {
   "tasks": [
     {
-      "name": "dotnet-format-beetles",
+      "name": "dotnet-format-playground",
       "command": "dotnet",
       "args": [
         "format",
-        "Beetles/Beetles.slnx",
+        "Playground/Playground.slnx",
         "--include",
         "${staged}"
       ],
@@ -14,11 +14,11 @@
       ]
     },
     {
-      "name": "dotnet-format-beetles-verify",
+      "name": "dotnet-format-playground-verify",
       "command": "dotnet",
       "args": [
         "format",
-        "Beetles/Beetles.slnx",
+        "Playground/Playground.slnx",
         "--verify-no-changes",
         "--include",
         "${staged}"
