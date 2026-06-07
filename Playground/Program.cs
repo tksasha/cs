@@ -4,6 +4,7 @@ class Program
 {
     public static void Main()
     {
-        NewToHideMethod.Run();
+        // NewToHideMethod.Run();
+        Delegates.Run();
     }
 }

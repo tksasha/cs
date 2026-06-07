@@ -5,7 +5,7 @@
       "command": "dotnet",
       "args": [
         "format",
-        "Playground/Playground.slnx",
+        "Playground",
         "--include",
         "${staged}"
       ],
@@ -18,7 +18,7 @@
       "command": "dotnet",
       "args": [
         "format",
-        "Playground/Playground.slnx",
+        "Playground",
         "--verify-no-changes",
         "--include",
         "${staged}"
