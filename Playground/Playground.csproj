@@ -13,6 +13,7 @@
 
     <!-- Required for IDE0005 (Remove unnecessary usings) to work during build -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- <NoWarn>$(NoWarn);CS1591</NoWarn> -->
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 

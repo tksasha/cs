@@ -6,6 +6,7 @@ class Program
     {
         // NewToHideMethod.Run();
         // Delegates.Run();
-        Events.Run();
+        // Events.Run();
+        Expressions.Run();
     }
 }
