@@ -1,6 +1,6 @@
 namespace Playground;
 
-class Delegates
+static class Delegates
 {
     static int Sum(int a, int b)
         => a + b;

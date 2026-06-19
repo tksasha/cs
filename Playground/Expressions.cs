@@ -51,7 +51,9 @@ static class Expressions
 
     static void Two()
     {
+#pragma warning disable CA1303
         WriteLine("I'm Two.");
+#pragma warning restore CA1303
     }
 
     static void Third(string name)

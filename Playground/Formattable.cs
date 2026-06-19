@@ -4,7 +4,7 @@ namespace Playground;
 
 static class Formattable
 {
-    class Author : IFormattable
+    sealed class Author : IFormattable
     {
         public required string Name { get; set; }
 
@@ -26,7 +26,7 @@ static class Formattable
             => ToString("N", CultureInfo.CurrentCulture);
     }
 
-    class Book : IFormattable
+    sealed class Book : IFormattable
     {
         public required string Title { get; set; }
         public required Author Author { get; set; }

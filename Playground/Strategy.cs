@@ -2,30 +2,30 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Playground;
 
-class Strategy
+static class Strategy
 {
     interface IFeeCalculator
     {
         decimal Calculate(decimal price);
     }
 
-    class RozetkaFeeCalculator : IFeeCalculator
+    sealed class RozetkaFeeCalculator : IFeeCalculator
     {
-        private static readonly decimal _rate = 0.1M;
+        private const decimal _rate = 0.1M;
 
         public decimal Calculate(decimal price)
             => price * _rate;
     }
 
-    class NovaPoshtaFeeCalculator : IFeeCalculator
+    sealed class NovaPoshtaFeeCalculator : IFeeCalculator
     {
-        private static readonly decimal _rate = 0.2M;
+        private const decimal _rate = 0.2M;
 
         public decimal Calculate(decimal price)
             => price * _rate;
     }
 
-    class Delivery
+    sealed class Delivery
     {
 #pragma warning disable CA1822
         public decimal Fee(IFeeCalculator feeCalculator, decimal price)

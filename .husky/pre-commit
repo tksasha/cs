@@ -19,5 +19,4 @@
 ## or put your custom commands -------------------
 #echo 'Husky.Net is awesome!'
 
-# dotnet husky run --name dotnet-format-playground
-dotnet husky run --name dotnet-format-playground-verify
+dotnet husky run --name dotnet-format

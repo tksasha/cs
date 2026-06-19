@@ -1,7 +1,7 @@
 {
   "tasks": [
     {
-      "name": "dotnet-format-playground",
+      "name": "dotnet-format-and-change",
       "command": "dotnet",
       "args": [
         "format",
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "name": "dotnet-format-playground-verify",
+      "name": "dotnet-format",
       "command": "dotnet",
       "args": [
         "format",

@@ -2,20 +2,20 @@
 
 namespace Playground.Tests;
 
-class Book
+sealed class Book
 {
     public int Id { get; set; }
     public required string Title { get; set; }
 }
 
-class PlaygroundDbContext(DbContextOptions<PlaygroundDbContext> options) : DbContext(options)
+sealed class PlaygroundDbContext(DbContextOptions<PlaygroundDbContext> options) : DbContext(options)
 {
     public DbSet<Book> Books => Set<Book>();
 }
 
-public class InMemoryTest
+public sealed class InMemoryTest : IDisposable
 {
-    readonly PlaygroundDbContext _dbContext;
+    private readonly PlaygroundDbContext _dbContext = null!;
 
     public InMemoryTest()
     {
@@ -23,6 +23,11 @@ public class InMemoryTest
             .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
 
         _dbContext = new PlaygroundDbContext(options);
+    }
+
+    public void Dispose()
+    {
+        _dbContext.Dispose();
     }
 
     [Fact]

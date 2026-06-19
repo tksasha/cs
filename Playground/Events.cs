@@ -1,8 +1,8 @@
 namespace Playground;
 
-class Events
+static class Events
 {
-    class Button
+    sealed class Button
     {
         public event EventHandler? ClickCallback;
 

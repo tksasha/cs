@@ -1,6 +1,6 @@
 namespace Playground;
 
-class Program
+sealed class Program
 {
     public static void Main()
     {

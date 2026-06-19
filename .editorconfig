@@ -29,5 +29,17 @@ dotnet_diagnostic.CA1873.severity = silent
 dotnet_sort_system_directives_first = true
 dotnet_separate_import_directive_groups = true
 
+# CA1812: An internal (assembly-level) type is never instantiated
+dotnet_diagnostic.CA1812.severity = suggestion
+
+# CA1707: Identifiers should not contain underscores
+dotnet_diagnostic.CA1707.severity = none
+
+# CA2007: An asynchronous method awaits a Task directly
+dotnet_diagnostic.CA2007.severity = none
+
+# CS1591: Missing XML comment for publicly visible type or member
+dotnet_diagnostic.CS1591.severity = none
+
 [Beetles/src/Beetles.Infrastructure/Migrations/*.cs]
 generated_code = true

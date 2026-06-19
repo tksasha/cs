@@ -1,6 +1,6 @@
 ﻿namespace Playground;
 
-class NewToHideMethod
+static class NewToHideMethod
 {
     class Person
     {
@@ -8,7 +8,7 @@ class NewToHideMethod
         internal virtual int Level { get; init; }
     }
 
-    class Player : Person
+    sealed class Player : Person
     {
         internal new int Level { get; init; }
     }
