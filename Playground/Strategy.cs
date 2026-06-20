@@ -27,10 +27,10 @@ static class Strategy
 
     sealed class Delivery
     {
-#pragma warning disable CA1822
+#pragma warning disable CA1822, S2325
         public decimal Fee(IFeeCalculator feeCalculator, decimal price)
             => feeCalculator.Calculate(price);
-#pragma warning restore CA1822
+#pragma warning restore CA1822, S2325
     }
 
     public static void Run()

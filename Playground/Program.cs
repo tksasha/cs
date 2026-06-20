@@ -1,6 +1,7 @@
 namespace Playground;
 
-sealed class Program
+#pragma warning disable S125
+static class Program
 {
     public static void Main()
     {
@@ -12,3 +13,4 @@ sealed class Program
         Strategy.Run();
     }
 }
+#pragma warning restore S125

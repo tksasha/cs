@@ -41,5 +41,8 @@ dotnet_diagnostic.CA2007.severity = none
 # CS1591: Missing XML comment for publicly visible type or member
 dotnet_diagnostic.CS1591.severity = none
 
+# CS8600: Converting null literal or possible null value to non-nullable type.
+dotnet_diagnostic.CS8600.severity = error
+
 [Beetles/src/Beetles.Infrastructure/Migrations/*.cs]
 generated_code = true

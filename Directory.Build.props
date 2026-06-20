@@ -6,12 +6,8 @@
 
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
 
-    <!-- Converting null literal or possible null value to non-nullable type -->
-    <WarningsAsErrors>CS8600</WarningsAsErrors>
-
     <!-- Required for IDE0005 (Remove unnecessary usings) to work during build -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <!-- <NoWarn>$(NoWarn);CS1591</NoWarn> -->
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>All</AnalysisMode>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>

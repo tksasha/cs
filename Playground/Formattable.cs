@@ -8,7 +8,7 @@ static class Formattable
     {
         public required string Name { get; set; }
 
-        public string ToString(string? format, IFormatProvider? _)
+        public string ToString(string? format, IFormatProvider? formatProvider)
         {
             if (string.IsNullOrWhiteSpace(format))
             {
