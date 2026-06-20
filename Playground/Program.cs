@@ -10,7 +10,8 @@ static class Program
         // Events.Run();
         // Expressions.Run();
         // Formattable.Run();
-        Strategy.Run();
+        // Strategy.Run();
+        SimpleFactoryPattern.Main.Run();
     }
 }
 #pragma warning restore S125
