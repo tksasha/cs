@@ -1,6 +1,6 @@
 namespace Examples;
 
-class Bitmasks
+static class Bitmasks
 {
     public static void Run()
     {
