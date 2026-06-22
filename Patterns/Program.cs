@@ -1,0 +1,3 @@
+﻿using Patterns;
+
+Singleton.Run();
