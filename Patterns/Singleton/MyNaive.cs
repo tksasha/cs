@@ -1,16 +1,16 @@
-namespace Patterns;
+namespace Patterns.Singleton;
 
-sealed class NaiveSingleton
+sealed class MyNaive
 {
     public int Value { get; }
 
-    private NaiveSingleton()
+    private MyNaive()
     {
         WriteLine("construct new instance");
         Value = 42;
     }
 
-    public static NaiveSingleton Instance { get; } = new();
+    public static MyNaive Instance { get; } = new();
 
     public static void Run()
     {
