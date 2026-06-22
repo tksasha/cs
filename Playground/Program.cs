@@ -9,7 +9,7 @@ static class Program
         // Delegates.Run();
         // Events.Run();
         // Expressions.Run();
-        // Formattable.Run();
+        Formattable.Run();
         // Strategy.Run();
         // SimpleFactoryPattern.Main.Run();
     }

@@ -1,5 +1,5 @@
-﻿using Patterns.Singleton;
+﻿// Patterns.Singleton.Naive.Run();
+// Patterns.Singleton.MyNaive.Run();
+// Patterns.Singleton.Di.Run();
 
-MyNaive.Run();
-Naive.Run();
-Di.Run();
+Patterns.Builder.Program.Run();
