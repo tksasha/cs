@@ -1,3 +1,3 @@
 ﻿using Patterns;
 
-Singleton.Run();
+NaiveSingleton.Run();
