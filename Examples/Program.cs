@@ -16,7 +16,7 @@ static class Program
         // LocalFunction.Run();
         // Structs.Run();
         // Records.Run();
-        RecordsWith.Run();
+        // RecordsWith.Run();
         // Classes.BankAccount.Run();
         // Classes.Test.Run();
         // Classes.Animal.Run();
@@ -24,6 +24,7 @@ static class Program
         // Classes.Abstract.Run();
         // Compare.Test.Run();
         // Bitmasks.Run();
+        Events.Run();
     }
 
 #pragma warning disable IDE0051

@@ -1,4 +1,4 @@
-namespace Playground;
+namespace Examples;
 
 static class Events
 {
