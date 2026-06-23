@@ -20,7 +20,7 @@ class ParamsKeyword
 
     public static void Run()
     {
-        int[] numbers = { 1, 2, 3 };
+        int[] numbers = [1, 2, 3];
 
         AsArray(numbers);
 
