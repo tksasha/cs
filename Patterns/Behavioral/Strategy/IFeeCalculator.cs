@@ -1,4 +1,4 @@
-namespace Patterns.Strategy;
+namespace Patterns.Behavioral.Strategy;
 
 interface IFeeCalculator
 {

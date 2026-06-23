@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Patterns.Strategy;
+namespace Patterns.Behavioral.Strategy;
 
 static class Program
 {
