@@ -1,4 +1,4 @@
-namespace Patterns.Singleton;
+namespace Patterns.Creational.Singleton;
 
 sealed class MyNaive
 {

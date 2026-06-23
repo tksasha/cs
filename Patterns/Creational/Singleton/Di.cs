@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Patterns.Singleton;
+namespace Patterns.Creational.Singleton;
 
 sealed class Di
 {
