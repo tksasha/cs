@@ -1,6 +1,5 @@
-namespace Playground;
+namespace Examples;
 
-#pragma warning disable S125, S1144
 static class Delegates
 {
     static int Sum(int a, int b)
@@ -39,4 +38,3 @@ static class Delegates
         inspect(37);
     }
 }
-#pragma warning restore S125, S1144
