@@ -4,4 +4,6 @@
 
 // Patterns.Builder.Program.Run();
 
-Patterns.SimpleFactory.Program.Run();
+// Patterns.SimpleFactory.Program.Run();
+
+Patterns.Strategy.Program.Run();

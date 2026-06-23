@@ -1,38 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Playground;
+namespace Patterns.Strategy;
 
-static class Strategy
+static class Program
 {
-    interface IFeeCalculator
-    {
-        decimal Calculate(decimal price);
-    }
-
-    sealed class RozetkaFeeCalculator : IFeeCalculator
-    {
-        private const decimal _rate = 0.1M;
-
-        public decimal Calculate(decimal price)
-            => price * _rate;
-    }
-
-    sealed class NovaPoshtaFeeCalculator : IFeeCalculator
-    {
-        private const decimal _rate = 0.2M;
-
-        public decimal Calculate(decimal price)
-            => price * _rate;
-    }
-
-    sealed class Delivery
-    {
-#pragma warning disable CA1822, S2325
-        public decimal Fee(IFeeCalculator feeCalculator, decimal price)
-            => feeCalculator.Calculate(price);
-#pragma warning restore CA1822, S2325
-    }
-
     public static void Run()
     {
         var serviceCollection = new ServiceCollection();
