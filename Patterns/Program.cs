@@ -2,4 +2,6 @@
 // Patterns.Singleton.MyNaive.Run();
 // Patterns.Singleton.Di.Run();
 
-Patterns.Builder.Program.Run();
+// Patterns.Builder.Program.Run();
+
+Patterns.SimpleFactory.Program.Run();

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Playground.SimpleFactoryPattern;
+namespace Patterns.SimpleFactory;
 
 enum PaymentMethod
 {
@@ -45,7 +45,7 @@ sealed class PaymentFactory(IServiceProvider serviceProvider)
         => serviceProvider.GetRequiredKeyedService<IPayment>(paymentMethod);
 }
 
-static class Main
+static class Program
 {
     public static void Run()
     {
