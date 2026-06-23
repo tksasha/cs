@@ -1,4 +1,4 @@
-namespace Patterns.Builder;
+namespace Patterns.Creational.Builder;
 
 static class Constants
 {
