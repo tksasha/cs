@@ -1,6 +1,6 @@
 namespace Examples;
 
-class LocalFunction
+static class LocalFunction
 {
     public static void Run()
     {

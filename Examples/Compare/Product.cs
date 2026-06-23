@@ -1,16 +1,16 @@
 namespace Examples.Compare;
 
-record class Product(int Id, string Name) : IComparable<Product>
+sealed record class Product(int Id, string Name) : IComparable<Product>
 {
     public int CompareTo(Product? other)
     {
         ArgumentNullException.ThrowIfNull(other);
 
-        return Name.CompareTo(other.Name);
+        return Name.CompareTo(other.Name, StringComparison.CurrentCulture);
     }
 }
 
-class ProductIdComparer : IComparer<Product>
+sealed class ProductIdComparer : IComparer<Product>
 {
     public int Compare(Product? a, Product? b)
     {
@@ -21,7 +21,7 @@ class ProductIdComparer : IComparer<Product>
     }
 }
 
-class Test
+static class Test
 {
     public static void Run()
     {

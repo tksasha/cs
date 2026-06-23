@@ -2,7 +2,7 @@ namespace Examples;
 
 #pragma warning disable IDE0066
 
-class SwitchStatement
+static class SwitchStatement
 {
     public static void Run()
     {

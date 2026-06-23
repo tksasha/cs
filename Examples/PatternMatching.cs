@@ -1,15 +1,15 @@
 namespace Examples;
 
-class PatternMatching
+static class PatternMatching
 {
     abstract class Vehicle { }
 
-    class Car : Vehicle
+    sealed class Car : Vehicle
     {
         public int Passengers { get; set; }
     }
 
-    class Truck : Vehicle
+    sealed class Truck : Vehicle
     { }
 
     public static void Run()

@@ -1,6 +1,6 @@
 namespace Examples.Classes;
 
-class BankAccount
+sealed class BankAccount
 {
     public static int TotalAccounts { get; private set; }
 

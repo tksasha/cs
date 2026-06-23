@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Examples;
 
-class Program
+static class Program
 {
     static void Main()
     {
@@ -16,14 +16,14 @@ class Program
         // LocalFunction.Run();
         // Structs.Run();
         // Records.Run();
-        // RecordsWith.Run();
+        RecordsWith.Run();
         // Classes.BankAccount.Run();
         // Classes.Test.Run();
         // Classes.Animal.Run();
         // Interfaces.ProductRepository.Run();
         // Classes.Abstract.Run();
         // Compare.Test.Run();
-        Bitmasks.Run();
+        // Bitmasks.Run();
     }
 
 #pragma warning disable IDE0051

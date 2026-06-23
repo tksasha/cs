@@ -12,7 +12,7 @@ class Person(string name, int age)
         => $"{Name}";
 }
 
-class Employee(string name, int age, string company) : Person(name, age)
+sealed class Employee(string name, int age, string company) : Person(name, age)
 {
     public string Company { get; } = company;
 
@@ -20,7 +20,7 @@ class Employee(string name, int age, string company) : Person(name, age)
         => $"{base.ToString()} from {Company}";
 }
 
-class Test
+static class Test
 {
     public static void Run()
     {

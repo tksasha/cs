@@ -1,6 +1,6 @@
 namespace Examples;
 
-class Records
+static class Records
 {
     struct Product : IEquatable<Product>
     {
@@ -9,11 +9,11 @@ class Records
         public readonly bool Equals(Product other)
             => Name == other.Name;
 
-        override public readonly bool Equals(Object? other)
+        override public readonly bool Equals(object? other)
             => other is Product product && Equals(product);
 
         override public readonly int GetHashCode()
-            => Name.GetHashCode();
+            => Name.GetHashCode(StringComparison.CurrentCulture);
 
         public static bool operator ==(Product a, Product b)
             => a.Name == b.Name;
@@ -24,9 +24,9 @@ class Records
 
     record struct Beverage(string Name);
 
-    record class Food(string Name);
+    sealed record class Food(string Name);
 
-    class Person
+    sealed class Person
     {
         public required string Name { get; set; }
     }

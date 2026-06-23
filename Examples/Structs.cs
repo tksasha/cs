@@ -32,7 +32,7 @@ readonly struct Temperature(decimal celsius) : IEquatable<Temperature>
         => a.ToCelsius() < b.ToCelsius();
 }
 
-class Structs
+static class Structs
 {
     public static void Run()
     {

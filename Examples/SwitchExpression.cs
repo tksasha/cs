@@ -1,6 +1,6 @@
 namespace Examples;
 
-class SwitchExpression
+static class SwitchExpression
 {
     public static void Run()
     {

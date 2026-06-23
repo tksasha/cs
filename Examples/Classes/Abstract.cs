@@ -10,7 +10,7 @@ abstract class Shape
     }
 }
 
-class Circle(decimal radius) : Shape
+sealed class Circle(decimal radius) : Shape
 {
     const decimal Pi = 3.14m;
 
@@ -18,13 +18,13 @@ class Circle(decimal radius) : Shape
         => Pi * radius * radius;
 }
 
-class Rectangle(decimal width, decimal height) : Shape
+sealed class Rectangle(decimal width, decimal height) : Shape
 {
     public override decimal Area()
         => width * height;
 }
 
-class Abstract
+static class Abstract
 {
     public static void Run()
     {

@@ -1,6 +1,6 @@
 namespace Examples;
 
-class ParamsKeyword
+static class ParamsKeyword
 {
     private static void AsArray(int[] numbers)
     {

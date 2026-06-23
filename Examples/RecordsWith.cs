@@ -1,8 +1,8 @@
 namespace Examples;
 
-class RecordsWith
+static class RecordsWith
 {
-    record class Product(string Name, string Category, decimal Price);
+    sealed record class Product(string Name, string Category, decimal Price);
 
     static public void Run()
     {

@@ -9,7 +9,7 @@ interface IAnimal
         => $"{Speak()} and {Move()}";
 }
 
-class Dog : IAnimal
+sealed class Dog : IAnimal
 {
     public string Speak()
         => "Wof-wof!";
@@ -18,7 +18,7 @@ class Dog : IAnimal
         => "Running";
 }
 
-class Snake : IAnimal
+sealed class Snake : IAnimal
 {
     public string Speak()
         => "Sh-h-h!";
@@ -28,7 +28,7 @@ class Snake : IAnimal
 
 }
 
-class Animal
+static class Animal
 {
     public static void Run()
     {

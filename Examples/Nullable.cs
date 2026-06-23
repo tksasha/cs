@@ -1,6 +1,6 @@
 namespace Examples;
 
-class Nullable
+static class Nullable
 {
     public static void Run()
     {
@@ -11,7 +11,7 @@ class Nullable
 
     static Number? GetNumber(bool isNull) => isNull ? null : new Number { };
 
-    class Number
+    sealed class Number
     {
         public override string ToString() => "Hello, I'm a Number";
     }

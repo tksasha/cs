@@ -9,9 +9,9 @@ interface IRepository<T>
     bool TryGetById(int id, out T item);
 }
 
-record class Product(int Id, string Name);
+sealed record class Product(int Id, string Name);
 
-class ProductRepository : IRepository<Product>
+sealed class ProductRepository : IRepository<Product>
 {
     readonly List<Product> _repository = [];
 
