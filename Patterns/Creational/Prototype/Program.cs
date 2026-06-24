@@ -1,6 +1,11 @@
 namespace Patterns.Creational.Prototype;
 
-sealed class Book
+interface IPrototype<T> where T : class
+{
+    T DeepClone();
+}
+
+sealed class Book : IPrototype<Book>
 {
     public int Id { get; set; }
 
