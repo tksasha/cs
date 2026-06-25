@@ -4,6 +4,8 @@
 
 // Patterns.Creational.FactoryMethod.Program.Run();
 
-Patterns.Creational.Prototype.Program.Run();
+// Patterns.Creational.Prototype.Program.Run();
 
 // Patterns.Behavioral.Strategy.Program.Run();
+
+Patterns.Structural.Adapter.Program.Run();
