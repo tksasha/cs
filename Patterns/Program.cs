@@ -8,4 +8,6 @@
 
 // Patterns.Behavioral.Strategy.Program.Run();
 
-Patterns.Structural.Adapter.Program.Run();
+// Patterns.Structural.Adapter.Program.Run();
+
+Patterns.OptionsPattern.Program.Run();
