@@ -10,4 +10,6 @@
 
 // Patterns.Structural.Adapter.Program.Run();
 
-Patterns.OptionsPattern.Program.Run();
+// Patterns.OptionsPattern.Program.Run();
+
+Patterns.Structural.Decorator.Program.Run();
